@@ -1,0 +1,77 @@
+"*":
+  editor:
+    invisibles: {}
+    showIndentGuide: true
+    fontFamily: "DejaVu Sans Mono"
+  core:
+    audioBeep: false
+    projectHome: "~/Dropbox/sandbox"
+    autoHideMenuBar: true
+    disabledPackages: [
+      "autocomplete-paths"
+      "atom-ternjs"
+      "emmet"
+      "atom-color-highlight"
+      "linter-tidy"
+      "color-picker"
+    ]
+    themes: [
+      "one-dark-ui"
+      "solarized-dark-syntax"
+    ]
+  "exception-reporting":
+    userId: "7cf47f9a-128c-6343-fde4-8b4641ed4827"
+  welcome:
+    showOnStartup: false
+  "vim-mode":
+    useSmartcaseForSearch: true
+  minimap:
+    scrollAnimation: true
+    plugins:
+      "find-and-replace": true
+    autoToggle: false
+  "atom-ternjs":
+    coffeeScript: true
+    docsPosition: "force bottom"
+  linter:
+    lintOnChangeInterval: 4000
+    lintOnChange: false
+    showHighlighting: false
+  "atom-color-highlight":
+    markersAtEndOfLine: true
+    hideMarkersInStrings: true
+    hideMarkersInComments: true
+  "autocomplete-plus":
+    strictMatching: true
+    confirmCompletion: "tab and enter"
+  "file-icons":
+    forceShow: true
+    coloured: false
+  "file-types":
+    html: "text.html.liquid"
+  "highlight-selected":
+    lightTheme: true
+  "linter-jshint": {}
+  "linter-coffeelint": {}
+  "linter-tidy":
+    tidyExecutablePath: "/usr/local/bin/tidyp"
+  "tree-view":
+    hideVcsIgnoredFiles: true
+    hideIgnoredNames: true
+    showOnRightSide: true
+  "coffee-compile": {}
+  "sublime-tabs":
+    hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
+    showOnRightSide: true
+    showIcons: false
+  "highlight-line":
+    hideHighlightOnSelect: true
+  tabs:
+    showIcons: false
+    alwaysShowTabBar: false
+  react:
+    jsxTagStartPattern: "(?x)((^|=|return)\\s*<([^!/?](?!.+?(</.+?>))))"
+    jsxComplexAttributePattern: "(?x)\\{ [^}\"']* $|\\( [^)\"']* $"
+    decreaseIndentForNextLinePattern: "(?x) />\\s*(,|;)?\\s*$ | ^\\s*\\S+.*</[-_\\.A-Za-z0-9]+>$"
+  emmet: {}

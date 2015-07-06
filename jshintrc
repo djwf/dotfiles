@@ -1,0 +1,19 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "esnext": true,
+  "freeze": true,
+  "futurehostile": true,
+  "latedef": true,
+  "maxdepth": 3,
+  "maxparams": 5,
+  "nocomma": true,
+  "nonbsp": true,
+  "nonew": true,
+  "strict": true,
+  "undef": true,
+  "varstmt": true,
+  "plusplus": true,
+  "browser": true,
+  "node": true
+}

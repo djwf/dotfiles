@@ -1,0 +1,105 @@
+# vim foldmethod=marker
+
+# WINDOW ================================================================== {{{1
+
+## MOVE -------------------------------------------------------------------
+
+# Focus window in direction
+alt + {h,j,k,l}
+  bspc window -f {left,down,up,right}
+
+# Focus last window
+alt + grave
+  bspc window -f last
+
+# Swap focused window with window in direction
+alt + shift + {h,j,k,l}
+  bspc window -s {left,down,up,right}
+
+# Move focused window to desktop
+alt + shift + {1-9,0}
+  bspc window -d {1-9,10}
+
+
+## RESIZE -----------------------------------------------------------------
+
+# Select splitting area
+super + {h,j,k,l}
+  bspc window -p {left,down,up,right}
+
+# Cancel splitting selected window
+super + space
+  bspc window -p cancel
+
+# Fullscreen/floating
+alt + {_,shift + }f
+  bspc window -t {fullscreen,floating}
+
+## CREATING/DESTROYING
+
+# Create new urxvt client
+alt + Return
+  urxvtc
+
+# Close window
+alt + w
+  bspc window -c
+
+
+# DESKTOP ================================================================= {{{1
+
+## MOVE -------------------------------------------------------------------
+
+# Switch to desktop
+alt + {1-9,0}
+  bspc desktop -f {1-9,10}
+
+# Switch to last desktop
+alt + tab
+  bspc desktop -f last
+
+
+## RESIZE -----------------------------------------------------------------
+
+# Cancel splitting selected desktop
+super + shift + space
+  bspc desktop -c
+
+# Balance desktop
+alt + b
+  bspc desktop -B
+
+
+# MOUSE =================================================================== {{{1
+
+# Focus on click
+~button1
+  bspc pointer -g focus
+
+# Move window
+alt + button1
+  bspc pointer -g move
+
+# Resize window side/corner
+alt + button{2-3}
+  bspc pointer -g {resize_side,resize_corner}
+
+# Ungrab on release
+alt + @button{1-3}
+  bspc pointer -u
+
+
+# MISC ==================================================================== {{{1
+
+# Open dmenu
+alt + space
+  dmenu_run -z
+
+# Reload sxhkd config
+alt + r
+  pkill -USR1 -x sxhkd
+
+# Quit bspwm
+alt + shift + Escape
+  bspc quit
+

@@ -1,0 +1,12 @@
+.DS_Store
+
+# Privacy
+gitconfig
+
+# Atom
+atom/*
+!/atom/config.cson
+!/atom/keymap.cson
+!/atom/snippets.cson
+!/atom/styles.less
+!/atom/init.coffee

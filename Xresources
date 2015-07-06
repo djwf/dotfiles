@@ -1,0 +1,62 @@
+urxvt.loginShell: true
+
+urxvt.perl-ext:
+urxvt.perl-ext-common:
+
+urxvt.font: xft:Inconsolata\-g for Powerline:style=g:size=10
+! urxvt.font: -*-proggycleansz-*-*-*-*-13-*-*-*-*-*-*-*
+
+urxvt.scrollBar: false
+urxvt.fading: 20
+
+! black   0, 8
+! red     1, 9
+! green   2, 10
+! yellow  3, 11
+! blue    4, 12
+! magenta 5, 13
+! cyan    6, 14
+! white   7, 15
+
+! ! Tomorrow Night Bright
+! *foreground:  #eaeaea
+! *background:  #000000
+! *cursorColor: #aeafad
+! *color0:      #000000
+! *color1:      #912226
+! *color2:      #778900
+! *color3:      #ae7b00
+! *color4:      #1d2594
+! *color5:      #682a9b
+! *color6:      #2b6651
+! *color7:      #929593
+! *color8:      #666666
+! *color9:      #cc6666
+! *color10:     #b5bd68
+! *color11:     #f0c674
+! *color12:     #81a2be
+! *color13:     #b294bb
+! *color14:     #8abeb7
+! *color15:     #ecebec
+
+! Spacegray
+*foreground:  #B7BBB7
+*background:  #111314
+*cursorColor: #aeafad
+*color0:      #2C2F33
+*color8:      #4B5056
+*color1:      #B04C50
+*color9:      #B04C50
+*color2:      #919652
+*color10:     #94985B
+*color3:      #E2995C
+*color11:     #E2995C
+*color4:      #66899D
+*color12:     #66899D
+*color5:      #8D6494
+*color13:     #8D6494
+*color6:      #527C77
+*color14:     #527C77
+*color7:      #606360
+*color15:     #DDE3DC
+

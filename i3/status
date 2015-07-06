@@ -1,0 +1,16 @@
+general {
+  output_format = "dzen2"
+  colors = true
+  interval = 2
+  color_good = "#BBBBBB"
+  color_bad = "#cc1616"
+  color_degraded = "#55858e"
+}
+
+order += "battery 0"
+
+battery 0 {
+  format = "%status %percentage %remaining %emptytime"
+  path = "/sys/class/power_supply/BAT%d/uevent"
+  low_threshold = 10
+}

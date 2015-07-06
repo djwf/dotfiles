@@ -1,0 +1,54 @@
+# Your keymap
+#
+# Atom keymaps work similarly to style sheets. Just as style sheets use
+# selectors to apply styles to elements, Atom keymaps use selectors to associate
+# keystrokes with events in specific contexts.
+#
+# You can create a new keybinding in this file by typing "key" and then hitting
+# tab.
+#
+# Here's an example taken from Atom's built-in keymap:
+#
+# 'atom-text-editor':
+#   'enter': 'editor:newline'
+#
+# 'atom-workspace':
+#   'ctrl-shift-p': 'core:move-up'
+#   'ctrl-p': 'core:move-down'
+#
+# You can find more information about keymaps in these guides:
+# * https://atom.io/docs/latest/customizing-atom#customizing-key-bindings
+# * https://atom.io/docs/latest/advanced/keymaps
+#
+# This file uses CoffeeScript Object Notation (CSON).
+# If you are unfamiliar with CSON, you can read more about it here:
+# https://github.com/bevry/cson#what-is-cson
+
+# Normal, Visual, Insert
+# 'atom-text-editor.vim-mode':
+  # 'ctrl-n': 'find-and-replace:select-next'
+
+# Normal, Visual
+'atom-text-editor.vim-mode:not(.insert-mode)':
+  'left': 'window:focus-pane-on-left'
+  'down': 'window:focus-pane-below'
+  'up': 'window:focus-pane-above'
+  'right': 'window:focus-pane-on-right'
+  '; w enter': 'core:save'
+  '; q enter': 'core:close'
+  ':': 'vim-mode:repeat-find'
+  'H': 'vim-mode:move-to-first-character-of-line'
+  'L': 'vim-mode:move-to-last-character-of-line'
+  '+': 'expand-selection:expand'
+
+# Normal
+'atom-text-editor.vim-mode.command-mode:not(.visual-mode)':
+  'g c c': 'editor:toggle-line-comments'
+
+# Visual
+'atom-text-editor.vim-mode.visual-mode:not(.command-mode)':
+  'g c': 'editor:toggle-line-comments'
+
+# Insert
+# 'atom-text-editor.vim-mode.insert-mode':
+#   # something
