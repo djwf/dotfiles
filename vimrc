@@ -409,6 +409,8 @@ command! Install call Bootstrap()
 command! V edit $MYVIMRC
 command! Cd cd %:p:h<CR>:pwd<CR>
 
+command! Marked !open % -a "Marked 2"
+
 command! LoadYCM call plug#load('YouCompleteMe') | call youcompleteme#Enable() | echo "YouCompleteMe loaded!"
 
 command! Molokai colorscheme molokai
