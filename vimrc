@@ -37,6 +37,7 @@
     " Editing
     Plug 'terryma/vim-multiple-cursors'
     Plug 'terryma/vim-expand-region'
+    Plug 'chrisbra/NrrwRgn'
     Plug 'junegunn/vim-easy-align'
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'tpope/vim-commentary'
@@ -51,6 +52,7 @@
     " Search
     Plug 'ctrlpvim/ctrlp.vim'
     Plug 'haya14busa/incsearch.vim'
+    Plug 'haya14busa/incsearch-fuzzy.vim'
 
     " Color schemes
     Plug 'morhetz/gruvbox'
@@ -87,15 +89,66 @@
 
     " Miscellaneous
     Plug 'bling/vim-airline'
-    " Plug 'Konfekt/FastFold'
     Plug 'tpope/vim-sensible'
-    Plug 'arecarn/selection.vim' " Dependency for 'arecarn/crunch.vim'
+    Plug 'wincent/terminus'
+    Plug 'arecarn/selection.vim' " Dependency of 'arecarn/crunch.vim'
     " Plug 'kshenoy/vim-signature'
 
     call plug#end() " }}}
 
     " Plugin settings {{{
     if isdirectory(expand('~/.' . g:vimFolder . '/plugged'))
+      " Tagbar extra language config {{{
+      let g:tagbar_type_haskell = {
+        \ 'ctagsbin'  : 'hasktags',
+        \ 'ctagsargs' : '-x -c -o-',
+        \ 'kinds'     : [
+          \ 'm:modules:0:1',
+          \ 'd:data: 0:1',
+          \ 'd_gadt: data gadt:0:1',
+          \ 't:type names:0:1',
+          \ 'nt:new types:0:1',
+          \ 'c:classes:0:1',
+          \ 'cons:constructors:1:1',
+          \ 'c_gadt:constructor gadt:1:1',
+          \ 'c_a:constructor accessors:1:1',
+          \ 'ft:function types:1:1',
+          \ 'fi:function implementations:0:1',
+          \ 'o:others:0:1'
+        \ ],
+        \ 'sro'        : '.',
+        \ 'kind2scope' : {
+          \ 'm' : 'module',
+          \ 'c' : 'class',
+          \ 'd' : 'data',
+          \ 't' : 'type'
+        \ },
+        \ 'scope2kind' : {
+          \ 'module' : 'm',
+          \ 'class'  : 'c',
+          \ 'data'   : 'd',
+          \ 'type'   : 't'
+        \ }
+      \ }
+
+      let g:tagbar_type_markdown = {
+        \ 'ctagstype' : 'markdown',
+        \ 'kinds' : [
+          \ 'h:Heading_L1',
+          \ 'i:Heading_L2',
+          \ 'k:Heading_L3'
+        \ ]
+      \ }
+
+      let g:tagbar_type_css = {
+        \ 'ctagstype' : 'Css',
+        \ 'kinds'     : [
+          \ 'c:classes',
+          \ 's:selectors',
+          \ 'i:identities'
+        \ ]
+      \ }
+      " }}}
       let g:better_whitespace_filetypes_blacklist=[
         \ 'vim-plug',
         \ 'help',
@@ -109,7 +162,23 @@
       let g:airline_extensions=['whitespace', 'branch', 'hunks', 'ctrlp']
       let g:SignaturePurgeConfirmation=1
       let g:ctrlp_map=''
-      let g:haskell_tabular=0
+      " vim2hs {{{
+        let g:haskell_tabular=0
+        let g:haskell_conceal=0
+        let g:haskell_conceal_enumerations=0
+
+        " Quasiquoting
+        let g:haskell_quasi=0
+        let g:haskell_interpolation=0
+        let g:haskell_regex=0
+        let g:haskell_jmacro=0
+        let g:haskell_shqq=0
+        let g:haskell_sql=0
+        let g:haskell_json=0
+        let g:haskell_xml=0
+
+        let g:haskell_hsp = 0
+      " }}}
     endif
   else
     if !&secure
@@ -230,7 +299,7 @@ set ttimeoutlen=100
 if has('gui_running')
   set showcmd
   set cursorline
-  let &colorcolumn=join(range(81,120),",")
+  let &colorcolumn=join(range(81,120),',')
   set scrolloff=8 sidescrolloff=15
   set guioptions=egt guicursor=n-c:block-Cursor-blinkon0,i:ver20
   " set lines=9999 columns=90
@@ -251,7 +320,7 @@ if has('gui_running')
       " OS X
       set macmeta
       " set columns=120
-      set guifont=Pragmata\ Pro:h15, InputMonoNarrow:h14, Monaco:h12
+      set guifont=Pragmata\ Pro:h16, InputMonoNarrow:h14, Monaco:h12
     else
       " Linux
       set guifont=Inconsolata-g\ for\ Powerline\ Medium\ 10
@@ -294,18 +363,24 @@ function! Markdown() " {{{
   let g:markdown_fenced_languages=['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
 endfunction " }}}
 
+function! CPP() " {{{
+  if has('gui_running')
+    let &colorcolumn=join(range(76,80),',')
+  endif
+endfunction " }}}
+
 function! CustomFoldText() " {{{
   " http://dhruvasagar.com/2013/03/28/vim-better-foldtext
   " http://www.gregsexton.org/2011/03/improving-the-text-displayed-in-a-fold/
 
   " The characters used in single-line comments -------> [       here       ]   and    [       here       ]
-  let line = ' ' . substitute(getline(v:foldstart), '^\s*["#(//)(--)(;{1-2})]\?\s*\|\s*["#(//)(--)(;{1-2})]\?\s*{{' . '{\d*\s*', '', 'g') . ' '
-  let lines_count = v:foldend - v:foldstart + 1
-  let foldpercentage = printf("[%.0f", ((1+v:foldend-v:foldstart)*1.0)/(line("$"))*100) . "%] "
-  let foldchar = matchstr(&fillchars, 'fold:\zs.')
-  let foldtextstart = strpart('+' . repeat(foldchar, v:foldlevel*2) . line, 0, (winwidth(0)*2)/3)
-  let foldtextend = ' ' . (1 + v:foldend - v:foldstart) . ' lines ' . repeat(foldchar, 8)
-  let foldtextlength = strlen(substitute(foldtextstart . foldtextend, '.', 'x', 'g')) + &foldcolumn
+  let line=' ' . substitute(getline(v:foldstart), '^\s*["#(//)(--)(;{1-2})]\?\s*\|\s*["#(//)(--)(;{1-2})]\?\s*{{' . '{\d*\s*', '', 'g') . ' '
+  let lines_count=v:foldend - v:foldstart + 1
+  let foldpercentage=printf("[%.0f", ((1+v:foldend-v:foldstart)*1.0)/(line("$"))*100) . "%] "
+  let foldchar=matchstr(&fillchars, 'fold:\zs.')
+  let foldtextstart=strpart('+' . repeat(foldchar, v:foldlevel*2) . line, 0, (winwidth(0)*2)/3)
+  let foldtextend=' ' . (1 + v:foldend - v:foldstart) . ' lines ' . repeat(foldchar, 8)
+  let foldtextlength=strlen(substitute(foldtextstart . foldtextend, '.', 'x', 'g')) + &foldcolumn
   return foldtextstart . repeat(foldchar, winwidth(0)-foldtextlength) . foldtextend
 endfunction
 set foldtext=CustomFoldText() " }}}
@@ -332,7 +407,6 @@ let g:os=CheckOS() " }}}
 "  |
 "  V
 noremap Q <Nop>
-noremap R <Nop>
 noremap K <Nop>
 noremap X <Nop>
 noremap M <Nop>
@@ -348,8 +422,6 @@ noremap <Right> <Nop>
 " }}}
 
 " General {{{
-let g:mapleader='\'
-map <Space> <Leader>
 
 noremap ; :
 noremap : ;
@@ -365,6 +437,11 @@ nnoremap J mzJ`z:delm z<CR>
 nnoremap S mzi<CR><Esc>^gk:silent! s/\v +$//<CR>:noh<CR>`z:delm z<CR>
 nnoremap s :%s/\v
 vnoremap s :s/\v
+
+" Quickly replace all occurances of word/selection
+nnoremap R *N:redraw!<CR>"zyiw:%s/z/
+vnoremap R "zy/z<CR>:redraw!<CR>:%s/z/
+
 noremap <BS> :noh<CR>
 noremap <F1> <Esc>
 vnoremap <Tab> >gv
@@ -373,13 +450,18 @@ vnoremap < <gv
 vnoremap > >gv
 " cnoremap w!! w !sudo tee % >/dev/null
 
+" Leader
+let g:mapleader='\'
+map <Space> <Leader>
+noremap <Leader>t :TagbarToggle<CR>
+
 " Homemade vim-unimpaired
 nnoremap [<Space> mzO<Esc>`z:delm z<CR>
 nnoremap ]<Space> mzo<Esc>`z:delm z<CR>
 nnoremap [e "zddk"zP
 nnoremap ]e "zdd"zp
-noremap [b :bprevious
-noremap ]b :bnext
+noremap [b :bprevious<CR>
+noremap ]b :bnext<CR>
 " }}}
 
 " Plugins {{{
@@ -390,8 +472,9 @@ if g:plugged_installed==1
   vmap <Enter> <Plug>(EasyAlign)
 
   map / <Plug>(incsearch-forward)
+  map z/ <Plug>(incsearch-fuzzyspell-/)
   map ? <Plug>(incsearch-backward)
-  map g/ <Plug>(incsearch-stay)
+  map z? <Plug>(incsearch-fuzzyspell-?)
 
   noremap <Leader>p :CtrlPMixed<CR>
 endif
@@ -407,7 +490,6 @@ endif
 " COMMANDS {{{1
 command! Install call Bootstrap()
 command! V edit $MYVIMRC
-command! Cd cd %:p:h<CR>:pwd<CR>
 
 command! Marked !open % -a "Marked 2"
 
@@ -419,7 +501,6 @@ command! Night colorscheme seoul256
 
 
 " AUTOCOMMANDS {{{1
-
 augroup FormatOptions " {{{
   autocmd! BufNewFile,BufRead * setlocal formatoptions+=j
   autocmd! BufNewFile,BufRead * setlocal formatoptions-=cro
@@ -434,6 +515,7 @@ augroup FileTypeAware " {{{
   " autocmd FileType vim setlocal keywordprg=':help'
   autocmd FileType javascript call JavaScript()
   autocmd BufRead,BufNewFile *.md call Markdown()
+  autocmd FileType cpp call CPP()
   autocmd Filetype gitcommit setlocal spell textwidth=72
 augroup END " }}}
 

@@ -21,6 +21,10 @@
                       auto-completion-return-key-behavior 'nil
                       auto-completion-tab-key-behavior 'complete)
 
+     ;; version-control
+     ;; git
+     ;; github
+
      ;; Languages
      haskell
      javascript
@@ -69,6 +73,7 @@ before layers configuration."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(monokai
+                         gruvbox
                          solarized-dark
                          subatomic
                          leuven
@@ -158,8 +163,8 @@ layers configuration."
   ;; Make Spacemacs more terminal-friendly
   (unless (display-graphic-p)
     (global-hl-line-mode -1)
-    (defun mouse-up () (interactive) (scroll-up 2))
-    (defun mouse-down () (interactive) (scroll-down 2))
+    (defun mouse-up () (interactive) (scroll-up 1))
+    (defun mouse-down () (interactive) (scroll-down 1))
     (global-set-key (kbd "<mouse-4>") 'mouse-down)
     (global-set-key (kbd "<mouse-5>") 'mouse-up))
 
@@ -188,37 +193,7 @@ layers configuration."
   ;; (define-key evil-insert-state-map (kbd "C-p") 'mc/mark-previous-like-this)
   ;; (define-key evil-visual-state-map (kbd "C->") 'mc/edit-lines)
   ;; (define-key evil-insert-state-map (kbd "C-c C->") 'mc/mark-all-like-this)
+  ;; Nicer mouse scrolling
+  ;; http://stackoverflow.com/a/445881
+  (setq-default mouse-wheel-scroll-amount '(2))
   )
-
-
-
-
-
-
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ahs-case-fold-search nil)
- '(ahs-default-range (quote ahs-range-whole-buffer))
- '(ahs-idle-interval 0.25)
- '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil)
- '(ring-bell-function (quote ignore) t)
- '(safe-local-variable-values
-   (quote
-    ((haskell-process-args-ghci "ghci")
-     (haskell-process-path-ghci . "stack")
-     (haskell-process-type . ghci)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 257)) (:foreground "#F8F8F2" :background "#272822")) (((class color) (min-colors 89)) (:foreground "#F5F5F5" :background "#1B1E1C"))))
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))

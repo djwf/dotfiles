@@ -29,8 +29,6 @@ alias V="vim +V"
 alias g="git"
 alias gl="git log"
 alias gs="git status"
-alias please="sudo !!"
-alias pls=please
 
 # Better defaults
 alias ghc="ghc -Wall -Werror"
