@@ -1,8 +1,5 @@
 .DS_Store
 
-# Privacy
-gitconfig
-
 # Atom
 atom/*
 !/atom/config.cson
