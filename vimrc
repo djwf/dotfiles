@@ -27,6 +27,11 @@
     let g:plugged_installed=0
   endif " }}}
 
+  " Check for fish shell {{{
+  if &shell=~#'fish$'
+    set shell=sh
+  endif " }}}
+
   " Plugins {{{
   if g:plugged_installed==1
     call plug#begin('~/.' . g:vimFolder . '/plugged')
@@ -36,62 +41,60 @@
 
     " Editing
     Plug 'terryma/vim-multiple-cursors'
-    Plug 'terryma/vim-expand-region'
-    Plug 'chrisbra/NrrwRgn'
     Plug 'junegunn/vim-easy-align'
     Plug 'godlygeek/tabular', {'on': 'Tabularize'}
     Plug 'tpope/vim-commentary'
     Plug 'tpope/vim-surround'
-    Plug 'tommcdo/vim-exchange' " cx
+    Plug 'tommcdo/vim-exchange'
     Plug 'Valloric/YouCompleteMe', {
       \ 'do': './install.sh --clang-completer',
       \ 'on': []
       \ } " :LoadYCM
-    Plug 'jiangmiao/auto-pairs'
+    " Plug 'jiangmiao/auto-pairs'
+    Plug 'rstacruz/vim-closer'
+    Plug 'tpope/vim-endwise'
 
     " Search
     Plug 'ctrlpvim/ctrlp.vim'
-    Plug 'haya14busa/incsearch.vim'
-    Plug 'haya14busa/incsearch-fuzzy.vim'
+    Plug 'thinca/vim-visualstar'
+
+    " Movement and navigation
+    Plug 'bruno-/vim-husk'
+    Plug 'arecarn/fold-cycle.vim'
 
     " Color schemes
+    Plug 'zefei/vim-colortuner'
     Plug 'morhetz/gruvbox'
     Plug 'tomasr/molokai'
     Plug 'junegunn/seoul256.vim'
     Plug 'endel/vim-github-colorscheme'
-    " Plug 'w0ng/vim-hybrid'
-    " Plug 'chriskempson/base16-vim'
-    " Plug 'altercation/vim-colors-solarized'
+    Plug 'NLKNguyen/papercolor-theme'
+    Plug 'w0ng/vim-hybrid'
+    Plug 'chriskempson/base16-vim'
+    Plug 'altercation/vim-colors-solarized'
 
     " Language and syntax
     Plug 'sheerun/vim-polyglot'
-    Plug 'ntpeters/vim-better-whitespace'
     Plug 'dag/vim2hs'
     Plug 'Twinside/vim-haskellFold'
     Plug 'marijnh/tern_for_vim', {'do': 'npm install'}
+    Plug 'rstacruz/vim-hyperstyle'
     Plug 'tpope/vim-liquid'
+    Plug 'dag/vim-fish'
+    Plug 'ntpeters/vim-better-whitespace'
     Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 
-    " Enhancements
-    Plug 'bruno-/vim-husk'
-    Plug 'arecarn/fold-cycle.vim'
-    Plug 'tpope/vim-repeat'
-
     " Mappings and commands
-    Plug 'arecarn/crunch.vim'
+    Plug 'arecarn/crunch.vim' | Plug 'arecarn/selection.vim'
     Plug 'tpope/vim-eunuch'
-    Plug 'mhinz/vim-sayonara', {'on': 'Sayonara'}
     Plug 'michaeljsmith/vim-indent-object'
-
-    " Git
-    Plug 'tpope/vim-fugitive'
-    Plug 'airblade/vim-gitgutter'
 
     " Miscellaneous
     Plug 'bling/vim-airline'
     Plug 'tpope/vim-sensible'
     Plug 'wincent/terminus'
-    Plug 'arecarn/selection.vim' " Dependency of 'arecarn/crunch.vim'
+    Plug 'tpope/vim-repeat'
+    Plug 'airblade/vim-gitgutter'
     " Plug 'kshenoy/vim-signature'
 
     call plug#end() " }}}
@@ -140,14 +143,14 @@
         \ ]
       \ }
 
-      let g:tagbar_type_css = {
-        \ 'ctagstype' : 'Css',
-        \ 'kinds'     : [
-          \ 'c:classes',
-          \ 's:selectors',
-          \ 'i:identities'
-        \ ]
-      \ }
+      " let g:tagbar_type_css = {
+      "   \ 'ctagstype' : 'Css',
+      "   \ 'kinds'     : [
+      "     \ 'c:classes',
+      "     \ 's:selectors',
+      "     \ 'i:identities'
+      "   \ ]
+      " \ }
       " }}}
       let g:better_whitespace_filetypes_blacklist=[
         \ 'vim-plug',
@@ -155,13 +158,11 @@
         \ 'gundo',
         \ 'nerdtree'
         \ ]
-      let g:seoul256_background=236
-      let g:seoul256_light_background=252
       let g:airline_theme='zenburn'
       let g:airline_powerline_fonts=1
-      let g:airline_extensions=['whitespace', 'branch', 'hunks', 'ctrlp']
-      let g:SignaturePurgeConfirmation=1
+      let g:airline_extensions=['whitespace', 'hunks', 'ctrlp']
       let g:ctrlp_map=''
+      let g:colortuner_filepath='~/.vim/colortuner'
       " vim2hs {{{
         let g:haskell_tabular=0
         let g:haskell_conceal=0
@@ -265,6 +266,7 @@ set sidescroll=1
 set sidescrolloff=7
 set nowrap
 set synmaxcol=160
+set textwidth=80
 " }}}
 
 " Folding {{{
@@ -282,6 +284,7 @@ set t_vb=
 " Buffers and tabs {{{
 set hidden
 set autoread
+set autochdir
 set switchbuf=usetab
 set title
 let &titleold=getcwd()
@@ -320,7 +323,7 @@ if has('gui_running')
       " OS X
       set macmeta
       " set columns=120
-      set guifont=Pragmata\ Pro:h16, InputMonoNarrow:h14, Monaco:h12
+      set guifont=Pragmata\ Pro:h16
     else
       " Linux
       set guifont=Inconsolata-g\ for\ Powerline\ Medium\ 10
@@ -366,6 +369,7 @@ endfunction " }}}
 function! CPP() " {{{
   if has('gui_running')
     let &colorcolumn=join(range(76,80),',')
+    setlocal textwidth=75
   endif
 endfunction " }}}
 
@@ -429,7 +433,6 @@ noremap j gj
 noremap k gk
 noremap n nzz
 noremap N Nzz
-noremap U <C-r>
 noremap H ^
 noremap L g_
 noremap Y y$
@@ -439,8 +442,8 @@ nnoremap s :%s/\v
 vnoremap s :s/\v
 
 " Quickly replace all occurances of word/selection
-nnoremap R *N:redraw!<CR>"zyiw:%s/z/
-vnoremap R "zy/z<CR>:redraw!<CR>:%s/z/
+nnoremap R *N:redraw!<CR>:%s/<C-r><C-w>/
+vnoremap R "zy/<C-r>z<CR>:redraw!<CR>:%s/<C-r>z/
 
 noremap <BS> :noh<CR>
 noremap <F1> <Esc>
@@ -454,6 +457,7 @@ vnoremap > >gv
 let g:mapleader='\'
 map <Space> <Leader>
 noremap <Leader>t :TagbarToggle<CR>
+" noremap <Leader>nr :NR<CR>
 
 " Homemade vim-unimpaired
 nnoremap [<Space> mzO<Esc>`z:delm z<CR>
@@ -470,11 +474,6 @@ if g:plugged_installed==1
   map <S-Tab> <Plug>(fold-cycle-close)
 
   vmap <Enter> <Plug>(EasyAlign)
-
-  map / <Plug>(incsearch-forward)
-  map z/ <Plug>(incsearch-fuzzyspell-/)
-  map ? <Plug>(incsearch-backward)
-  map z? <Plug>(incsearch-fuzzyspell-?)
 
   noremap <Leader>p :CtrlPMixed<CR>
 endif
@@ -502,8 +501,9 @@ command! Night colorscheme seoul256
 
 " AUTOCOMMANDS {{{1
 augroup FormatOptions " {{{
-  autocmd! BufNewFile,BufRead * setlocal formatoptions+=j
-  autocmd! BufNewFile,BufRead * setlocal formatoptions-=cro
+  autocmd! BufNewFile,BufRead * setlocal formatoptions=crq2j
+  " autocmd! BufNewFile,BufRead * setlocal formatoptions+=j
+  " autocmd! BufNewFile,BufRead * setlocal formatoptions-=cro
 augroup END " }}}
 
 augroup FileTypeAware " {{{
@@ -534,23 +534,24 @@ command! ClearReg let regs='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
 " }}}
 
 " Source the range/visual selection {{{
-" "http://stackoverflow.com/a/20265113
-function! <SID>SourcePart(line1, line2)
-   let tmp = @z
-   silent exec a:line1.",".a:line2."yank z"
-   let @z = substitute(@z, '\n\s*\\', '', 'g')
-   @z
-   let @z = tmp
-endfunction
+" http://stackoverflow.com/a/20265113
+" function! <SID>SourcePart(line1, line2)
+"    let tmp = @z
+"    silent exec a:line1.",".a:line2."yank z"
+"    let @z = substitute(@z, '\n\s*\\', '', 'g')
+"    @z
+"    let @z = tmp
+" endfunction
 
-command! -nargs=? -bar -range Source if empty("<args>") | call <SID>SourcePart(<line1>, <line2>) | else | exec "so <args>" | endif
+" command! -nargs=? -bar -range EvalRegion if empty("<args>") | call <SID>SourcePart(<line1>, <line2>) | else | exec "so <args>" | endif
+command! EvalRegion echo "Use gs"
 
-" TODO: Find a way to make this not expand in any other commands
-cnoreabbrev so     Source
-cnoreabbrev sou    Source
-cnoreabbrev sour   Source
-cnoreabbrev sourc  Source
-cnoreabbrev source Source
+" " TODO: Find a way to make this not expand in any other commands
+" cnoreabbrev so     Source
+" cnoreabbrev sou    Source
+" cnoreabbrev sour   Source
+" cnoreabbrev sourc  Source
+" cnoreabbrev source Source
 " }}}
 
 " Only show foldcolumn when there are folds {{{
@@ -598,5 +599,35 @@ cnoreabbrev source Source
 "   autocmd!
 "   autocmd CursorHold,BufWinEnter ?* call HasFolds()
 " augroup END " }}}
+
+" Source operator (gs) {{{
+" https://github.com/saaguero/vim-utils/blob/master/plugin/utils.vim#L1-L28
+function! SourceVimscript(type)
+  let sel_save=&selection
+  let &selection='inclusive'
+  let reg_save=@"
+
+  if a:type=='line'
+    silent execute "normal! '[V']y"
+  elseif a:type=='char'
+    silent execute "normal! `[v`]y"
+  elseif a:type=="visual"
+    silent execute "normal! gvy"
+  elseif a:type=="currentline"
+    silent execute "normal! yy"
+  endif
+
+  let @"=substitute(@", '\n\s*\\', '', 'g')
+
+  @" " source the content
+
+  let &selection=sel_save
+  let @"=reg_save
+endfunction
+
+nnoremap <silent> gs :set opfunc=SourceVimscript<CR>g@
+vnoremap <silent> gs :<C-U>call SourceVimscript("visual")<CR>
+nnoremap <silent> gss :call SourceVimscript("currentline")<CR>
+" }}}
 
 

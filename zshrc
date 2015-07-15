@@ -42,15 +42,16 @@ alias install-spacemacs="git clone --recursive https://github.com/syl20bnr/space
 # FUNCTIONS {{{1
 function rc {
   case "$1" in
-    vim|vi|v        ) $EDITOR ~/.vimrc                ;;
-    neovim|nvim|n   ) $EDITOR ~/.nvimrc               ;;
-    zsh|z           ) $EDITOR ~/.zshrc                ;;
-    i3              ) $EDITOR ~/.i3/config            ;;
-    xinit|xorg|x11|x) $EDITOR ~/.xinitrc              ;;
-    bspwm|bs|b      ) $EDITOR ~/.config/bspwm/bspwmrc ;;
-    sxhkd|sx|s      ) $EDITOR ~/.config/sxhkd/sxhkdrc ;;
-    compton|comp|co ) $EDITOR ~/.compton.config       ;;
-    *               ) echo "Not defined"              ;;
+    vim|vi|v        ) $EDITOR ~/.vimrc                   ;;
+    neovim|nvim|n   ) $EDITOR ~/.nvimrc                  ;;
+    zsh|z           ) $EDITOR ~/.zshrc                   ;;
+    i3              ) $EDITOR ~/.i3/config               ;;
+    xinit|xorg|x11|x) $EDITOR ~/.xinitrc                 ;;
+    bspwm|bs|b      ) $EDITOR ~/.config/bspwm/bspwmrc    ;;
+    sxhkd|sx|s      ) $EDITOR ~/.config/sxhkd/sxhkdrc    ;;
+    compton|comp|co ) $EDITOR ~/.compton.config          ;;
+    fish|f          ) $EDITOR ~/.config/fish/config.fish ;;
+    *               ) echo "Not defined"                 ;;
   esac
 }
 
@@ -71,7 +72,7 @@ bindkey -M vicmd '^z' foreground-current-job
 
 
 # ENVIRONMENT VARIABLES {{{1
-export PATH=$HOME/.local/bin::$HOME/.cabal/bin:$PATH
+export PATH=$HOME/.local/bin::$HOME/.cabal/bin:/usr/local/bin:$PATH
 export EDITOR="nvim"
 setopt PROMPT_SUBST
 export NL=$'\n' # newline
@@ -84,7 +85,7 @@ export NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 # OS SPECIFIC {{{1
 
 # Linux
-if [[ "$(uname -s )" == "Linux" ]]; then
+if [[ "$(uname -s)" == "Linux" ]]; then
   export PATH=$HOME/.npm/bin:$PATH
   alias ls="/bin/ls -AFph --group-directories-first --color=always"
   alias xload="xrdb -load ~/.Xresources"

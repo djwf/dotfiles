@@ -1,7 +1,17 @@
 [user]
-	name = Evan Relf
 	email = evan@evanrelf.com
+	name = Evan Relf
 [credential]
-	helper = cache --timeout=3600
+	helper = osxkeychain
+[web]
+	browser = open
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
 [push]
 	default = simple
+[core]
+	editor = vim
+[merge]
+	tool = vimdiff

@@ -1,237 +1,189 @@
-# http://eslint.org/docs/user-guide/configuring
-parser: babel-eslint
-
 env:
   browser: true
   node: true
   es6: true
 
+# Breaks `linter-eslint` in Atom
+# parser: babel-eslint
+
 ecmaFeatures:
-  arrowFunctions: true
-  binaryLiterals: true
   blockBindings: true
-  classes: true
-  defaultParams: true
-  destructuring: true
-  forOf: true
-  generators: true
-  modules: true
-  objectLiteralComputedProperties: true
-  objectLiteralDuplicateProperties: true
-  objectLiteralShorthandMethods: true
-  objectLiteralShorthandProperties: true
-  octalLiterals: true
-  regexUFlag: true
-  regexYFlag: true
-  restParams: true
-  spread: true
-  superInFunctions: true
-  templateStrings: true
-  unicodeCodePointEscapes: true
-  globalReturn: true
   jsx: true
 
-# http://eslint.org/docs/rules/
 rules:
-  # POSSIBLE ERRORS
-  comma-dangle: never
-  no-cond-assign: always
-  no-console: true
-  no-constant-condition: true
-  no-control-regex: true
-  no-debugger: true
-  no-dupe-args: true
-  no-dupe-keys: true
-  no-duplicate-case: true
-  no-empty-character-class: true
-  no-empty: true
-  no-ex-assign: true
-  no-extra-boolean-cast: true
-  no-extra-parens: false
-  no-extra-semi: true
-  no-func-assign: true
-  no-inner-declarations: true
-  no-invalid-regexp: true
-  no-irregular-whitespace: true
-  no-negated-in-lhs: true
-  no-obj-calls: true
-  no-regex-spaces: true
-  no-reserved-keys: true
-  no-sparse-arrays: true
-  no-unreachable: true
-  use-isnan: true
-  valid-jsdoc: true
-  valid-typeof: true
+  # Possible errors
+  comma-dangle: [2, "never"]
+  no-cond-assign: [2, "always"]
+  no-console: 1
+  no-constant-condition: 2
+  no-control-regex: 1
+  no-debugger: 2
+  no-dupe-args: 2
+  no-dupe-keys: 2
+  no-duplicate-case: 2
+  no-empty-character-class: 2
+  no-empty: 2
+  no-ex-assign: 2
+  no-extra-boolean-cast: 2
+  no-extra-parens: [2, "functions"]
+  no-extra-semi: 2
+  no-func-assign: 2
+  no-inner-declarations: [2, "both"]
+  no-invalid-regexp: 2
+  no-irregular-whitespace: 2
+  no-negated-in-lhs: 2
+  no-obj-calls: 2
+  no-regex-spaces: 1
+  no-reserved-keys: 2
+  no-sparse-arrays: 2
+  no-unreachable: 2
+  use-isnan: 2
+  valid-jsdoc: 1
+  valid-typeof: 2
+  # no-unexpected-multiline: 2
 
-  # BEST PRACTICES
-  accessor-pairs: true
-  block-scoped-var: true
-  complexity: false
-  consistent-return: true
-  curly: true
-  default-case: true
-  dot-notation:
-    - 2
-    allowKeywords: true
-  dot-location:
-    - 2
-    - property
-  eqeqeq: true
-  guard-for-in: true
-  no-alert: true
-  no-caller: true
-  no-div-regex: true
-  no-else-return: true
-  no-empty-label: true
-  no-eq-null: true
-  no-eval: true
-  no-extend-native: true
-  no-extra-bind: true
-  no-fallthrough: true
-  no-floating-decimal: true
-  no-implied-eval: true
-  no-iterator: true
-  no-labels: true
-  no-lone-blocks: true
-  no-loop-func: true
-  no-multi-spaces: true
-  no-multi-str: true
-  no-native-reassign: true
-  no-new-func: true
-  no-new-wrappers: true
-  no-new: true
-  no-octal-escape: true
-  no-octal: true
-  no-param-reassign: true
-  no-process-env: true
-  no-proto: true
-  no-redeclare: true
-  no-return-assign: true
-  no-script-url: true
-  no-self-compare: true
-  no-sequences: true
-  no-throw-literal: true
-  no-unused-expressions: true
-  no-void: true
-  no-warning-comments: false
-  no-with: true
-  radix: true
-  vars-on-top: false
-  wrap-iife:
-    - 2
-    - inside
-  yoda: never
+  # Best practices
+  accessor-pairs: 1
+  block-scoped-var: 2
+  complexity: [1, 3]
+  consistent-return: 2
+  curly: 2
+  default-case: 2
+  dot-notation: 2
+  dot-location: [2, "property"]
+  eqeqeq: 2
+  guard-for-in: 2
+  no-alert: 1
+  no-caller: 2
+  no-div-regex: 2
+  no-else-return: 2
+  no-empty-label: 2
+  no-eq-null: 2
+  no-eval: 2
+  no-extend-native: 1
+  no-extra-bind: 2
+  no-fallthrough: 2
+  no-floating-decimal: 2
+  no-implied-eval: 2
+  no-iterator: 2
+  no-labels: 2
+  no-lone-blocks: 2
+  no-loop-func: 2
+  no-multi-spaces: 2
+  no-multi-str: 1
+  no-native-reassign: 2
+  no-new-func: 2
+  no-new-wrappers: 2
+  no-new: 2
+  no-octal-escape: 2
+  no-octal: 2
+  no-param-reassign: 2
+  no-process-env: 2
+  no-proto: 2
+  no-redeclare: 2
+  no-return-assign: 2
+  no-script-url: 1
+  no-self-compare: 2
+  no-sequences: 2
+  no-throw-literal: 2
+  no-unused-expressions: 2
+  no-void: 2
+  no-warning-comments: 0
+  no-with: 2
+  radix: 2
+  vars-on-top: 0
+  wrap-iife: [2, "inside"]
+  yoda: 2
 
-  # STRICT MODE
-  strict: global
+  # Strict mode
+  strict: 0
 
-  # VARIABLES
-  # no-catch-shadow: something
-  # no-delete-var: something
-  # no-label-var: something
-  # no-shadow-restricted-names: something
-  # no-shadow: something
-  # no-undef-init: something
-  # no-undef: something
-  # no-undefined: something
-  # no-unused-vars: something
-  # no-use-before-define: something
+  # Variables
+  no-catch-shadow: 0
+  no-delete-var: 2
+  no-label-var: 2
+  no-shadow-restricted-names: 2
+  no-shadow: [2, {"hoist": "all"}]
+  no-undef-init: 2
+  no-undef: 2
+  no-undefined: 2
+  no-unused-vars: 0
+  # no-unused-vars: [1, {"vars": "all", "args": "all"}]
+  no-use-before-define: 2
 
-  # NODE.JS
-  handle-callback-err: true
-  no-mixed-requires: true
-  no-new-require: true
-  no-path-concat: true
-  no-process-exit: true
-  no-restricted-modules: false
-  no-sync: true
+  # Node.js
+  # handle-callback-err:
+  # no-mixed-requires:
+  # no-new-require:
+  # no-path-concat:
+  # no-process-exit:
+  # no-restricted-modules:
+  # no-sync:
 
-  # STYLISTIC ISSUES
-  brace-style:
-    - 2
-    - 1tbs
-    allowSingleLine: true
-  camelcase:
-    - 2
-    properties: always
-  comma-spacing:
-    - 2
-    before: false
-    after: true
-  comma-style:
-    - 2
-    - first
-  consistent-this:
-    - 0
-    - self
-  eol-last: true
-  func-names: something
-  func-style: something
-  indent: something
-  key-spacing: something
-  lines-around-comment: something
-  linebreak-style: something
-  max-nested-callbacks: something
-  new-cap: something
-  new-parens: something
-  newline-after-var: something
-  no-array-constructor: something
-  no-continue: something
-  no-inline-comments: something
-  no-lonely-if: something
-  no-mixed-spaces-and-tabs: something
-  no-multiple-empty-lines: something
-  no-nested-ternary: something
-  no-new-object: something
-  no-space-before-semi: something
-  no-spaced-func: something
-  no-ternary: something
-  no-trailing-spaces: something
-  no-underscore-dangle: something
-  no-unneeded-ternary: something
-  no-wrap-func: something
-  object-curly-spacing: something
-  one-var: something
-  operator-assignment: something
-  operator-linebreak: something
-  padded-blocks: something
-  quote-props: something
-  quotes: something
-  semi-spacing: something
-  semi: something
-  sort-vars: something
-  space-after-function-name: something
-  space-after-keywords: something
-  space-before-blocks: something
-  space-before-function-paren: something
-  space-before-function-parentheses: something
-  space-in-brackets: something
-  space-in-parens: something
-  space-infix-ops: something
-  space-return-throw-case: something
-  space-unary-ops: something
-  space-unary-word-ops: something
-  spaced-line-comment: something
-  wrap-regex: something
+  # Stylistic issues
+  # array-bracket-spacing: [1, "never"]
+  brace-style: [2, "1tbs", {"allowSingleLine": true}]
+  camelcase: [2, {"properties": "always"}]
+  comma-spacing: [2, {"before": false, "after": true}]
+  comma-style: [1, "first"]
+  computed-property-spacing: [2, "never"]
+  consistent-this: [0, "self"]
+  eol-last: 2
+  func-names: 0
+  func-style: [2, "declaration"]
+  indent: [2, 2]
+  # key-spacing:
+  lines-around-comment: 0
+  linebreak-style: [2, "unix"]
+  max-nested-callbacks: [2, 3]
+  new-cap: 2
+  new-parens: 2
+  newline-after-var: 0
+  no-array-constructor: 2
+  no-continue: 2
+  no-inline-comments: 0
+  no-lonely-if: 2
+  no-mixed-spaces-and-tabs: 2
+  no-multiple-empty-lines: 1
+  no-nested-ternary: 2
+  no-new-object: 2
+  no-spaced-func: 2
+  no-ternary: 0
+  no-trailing-spaces: 2
+  no-underscore-dangle: 2
+  no-unneeded-ternary: 2
+  object-curly-spacing: [1, "always", {"objectsInObjects": false}]
+  one-var: 0
+  operator-assignment: [1, "always"]
+  operator-linebreak: [1, "before"]
+  padded-blocks: 0
+  quote-props: [2, "as-needed"]
+  quotes: [1, "single", "avoid-escape"]
+  semi-spacing: [2, {"before": false, "after": true}]
+  semi: 2
+  sort-vars: 2
+  space-after-keywords: [2, "always"]
+  space-before-blocks: [2, "always"]
+  space-before-function-paren: [2, "never"]
+  space-in-parens: [1, "never", { "exceptions": ["{}"] }]
+  space-infix-ops: 2
+  space-return-throw-case: 2
+  # space-unary-ops:
+  spaced-comment: [2, "always"]
+  wrap-regex: 2
 
-  # ECMASCRIPT 6
-  generator-star-spacing:
-    - 2
-    - after
-  no-var: true
-  object-shorthand: always
+  # ECMAScript 6
+  # constructor-super:
+  # generator-star-spacing: [2, {"before": false, "after": true}]
+  # no-this-before-super:
+  no-var: 2
+  object-shorthand: 1
+  prefer-const: 2
 
-  # LEGACY
-  max-depth:
-    - 1
-    - 3
-  max-len:
-    - 2
-    - 80
-    - 2
-  max-params:
-    - 1
-    - 5
-  max-statements: false
-  no-bitwise: true
-  no-plusplus: true
+  # Legacy
+  # max-depth:
+  max-len: [1, 80, 2]
+  max-params: [1, 3]
+  # max-statements:
+  no-bitwise: 2
+  no-plusplus: 1
