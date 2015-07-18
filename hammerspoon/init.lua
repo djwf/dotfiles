@@ -1,72 +1,35 @@
 -- vim: foldmethod=marker foldenable
 
--- ALIASES {{{1
+-- SETTINGS {{{1
+hs.window.animationDuration = 0
+
+hs.grid.GRIDWIDTH = 3
+hs.grid.GRIDHEIGHT = 2
+hs.grid.MARGINX = 0
+hs.grid.MARGINY = 0
+
 hyper = {"cmd", "alt", "ctrl", "shift"}
 
 
--- HELPERS {{{1
+-- WINDOW MANAGEMENT {{{1
+hs.hotkey.bind(hyper, '1', function() hs.window.focusedWindow():moveToUnit(hs.layout.left30) end)
+hs.hotkey.bind(hyper, '3', function() hs.window.focusedWindow():moveToUnit(hs.layout.right30) end)
+hs.hotkey.bind(hyper, '4', function() hs.window.focusedWindow():moveToUnit(hs.layout.left70) end)
+hs.hotkey.bind(hyper, '5', function() hs.window.focusedWindow():moveToUnit(hs.layout.right70) end)
+hs.hotkey.bind(hyper, 'R', function() hs.window.focusedWindow():moveToUnit(hs.layout.left50) end)
+hs.hotkey.bind(hyper, 'T', function() hs.window.focusedWindow():moveToUnit(hs.layout.right50) end)
+hs.hotkey.bind(hyper, 'F', function() hs.window.focusedWindow():moveToUnit(hs.layout.maximized) end)
 
-function half(region)
-  local win = hs.window.focusedWindow()
-  local frame = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
+-- Move to next screen
+hs.hotkey.bind(hyper, "tab", function()
+  local focus = hs.window.focusedWindow()
+  local next = hs.screen.mainScreen():next()
 
-  if region == "left" then
-    frame.x = max.x
-  elseif region == "right" then
-    frame.x = max.x + (max.w / 2)
-  else
-    hs.alert.show("Invalid region")
-  end
+  focus:moveToScreen(next)
+end)
 
-  frame.y = max.y
-  frame.w = max.w / 2
-  frame.h = max.h
-
-  win:setFrame(frame)
-end
-
-function third(region)
-  local win = hs.window.focusedWindow()
-  local frame = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
-
-  frame.y = max.y
-  frame.w = max.w / 3
-  frame.h = max.h
-
-  if region == "1" then
-    frame.x = max.x
-  elseif region == "2" then
-    frame.x = max.x + (max.w / 3)
-  elseif region == "3" then
-    frame.x = max.x + 2 * (max.w / 3)
-  elseif region == "4" then
-    frame.x = max.x
-    frame.w = frame.w * 2
-  elseif region == "5" then
-    frame.x = max.x + (max.w / 3)
-    frame.w = frame.w * 2
-  else
-    hs.alert.show("Invalid region")
-  end
-
-  win:setFrame(frame)
-end
-
-
--- WINDOW SIZE PRESETS {{{1
-
-hs.hotkey.bind(hyper, "1", function() third("1") end)    -- Left third
-hs.hotkey.bind(hyper, "2", function() third("2") end)    -- Middle third
-hs.hotkey.bind(hyper, "3", function() third("3") end)    -- Right third
-hs.hotkey.bind(hyper, "4", function() third("4") end)    -- Left and middle thirds
-hs.hotkey.bind(hyper, "5", function() third("5") end)    -- Middle and right thirds
-hs.hotkey.bind(hyper, "R", function() half("left") end)  -- Left half
-hs.hotkey.bind(hyper, "T", function() half("right") end) -- Right half
-hs.hotkey.bind(hyper, "B", function()                    -- Browser
+-- Browser size
+hs.hotkey.bind(hyper, "B", function()
   local win = hs.window.focusedWindow()
   local frame = win:frame()
   local screen = win:screen()
@@ -79,7 +42,9 @@ hs.hotkey.bind(hyper, "B", function()                    -- Browser
 
   win:setFrame(frame)
 end)
-hs.hotkey.bind(hyper, "P", function()                    -- Perfect
+
+-- Perfect size
+hs.hotkey.bind(hyper, "2", function()
   local win = hs.window.focusedWindow()
   local frame = win:frame()
   local screen = win:screen()
@@ -92,50 +57,34 @@ hs.hotkey.bind(hyper, "P", function()                    -- Perfect
 
   win:setFrame(frame)
 end)
-hs.hotkey.bind(hyper, "F", function()                    -- Fullscreen
-  local win = hs.window.focusedWindow()
-  local frame = win:frame()
-  local screen = win:screen()
-  local max = screen:frame()
 
-  frame.x = max.x
-  frame.y = max.y
-  frame.w = max.w
-  frame.h = max.h
-
-  win:setFrame(frame)
-end)
-
-
--- MOVE WINDOW FOCUS {{{1
-
-function moveFocus(direction)
-  local focus = hs.window.focusedWindow()
-
-  if direction == "up" then focus:focusWindowNorth()
-  elseif direction == "down" then focus:focusWindowSouth()
-  elseif direction == "right" then focus:focusWindowEast()
-  elseif direction == "left" then focus:focusWindowWest()
-  end
-end
-
-hs.hotkey.bind(hyper, "H", function() moveFocus("left") end)
-hs.hotkey.bind(hyper, "J", function() moveFocus("down") end)
-hs.hotkey.bind(hyper, "K", function() moveFocus("up") end)
-hs.hotkey.bind(hyper, "L", function() moveFocus("right") end)
+-- hs.hotkey.bind(hyper, 'h', hs.grid.pushWindowLeft)
+-- hs.hotkey.bind(hyper, 'j', hs.grid.pushWindowDown)
+-- hs.hotkey.bind(hyper, 'k', hs.grid.pushWindowUp)
+-- hs.hotkey.bind(hyper, 'l', hs.grid.pushWindowRight)
 
 
 -- MISCELLANEOUS {{{1
+-- Auto-reload config
+function reloadConfig(files)
+  doReload = false
+  for _,file in pairs(files) do
+    if file:sub(-4) == ".lua" then
+      doReload = true
+    end
+  end
+  if doReload then
+    hs.reload()
+  end
+end
+hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 
-hs.hotkey.bind(hyper, "0", function()
-  hs.reload()
-end)
+hs.notify.new({
+  title = "Hammerspoon",
+  informativeText = "Config reloaded automatically"
+}):send():release()
 
-hs.alert.show("Config loaded!")
+-- Paste by typing
+hs.hotkey.bind(hyper, "V", function() hs.eventtap.keyStrokes(hs.pasteboard.getContents()) end)
 
-hs.hotkey.bind(hyper, "tab", function()                  -- Move to next screen
-  local focus = hs.window.focusedWindow()
-  local next = hs.screen.mainScreen():next()
 
-  focus:moveToScreen(next)
-end)

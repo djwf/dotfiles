@@ -11,50 +11,57 @@ if test -e $HOME/.config/fish/z.fish
   . $HOME/.config/fish/z.fish
 end
 
-# VARIABLES {{{1
-set PATH $HOME/.local/bin $HOME/.cabal/bin $PATH
-set -x OS (uname -s)
-set -x EDITOR nvim
-set -x NVIM_TUI_ENABLE_CURSOR_SHAPE 1
 
-# Colors {{{
-set fish_color_autosuggestion '-o' 'black'
-set fish_color_command green
-set fish_color_comment '-o' 'black'
-set fish_color_cwd '-o' 'black'
-set fish_color_cwd_root red
-set fish_color_end normal
-set fish_color_error red
-set fish_color_escape cyan
-set fish_color_history_current cyan
-set fish_color_host '-o' 'cyan'
-set fish_color_match cyan
-set fish_color_normal normal
-set fish_color_operator normal
-set fish_color_param normal
-set fish_color_quote yellow
-set fish_color_redirection blue
-set fish_color_search_match --background=magenta
-set fish_color_status red
-set fish_color_user green
-set fish_color_valid_path --underline
-# }}}
+# VARIABLES {{{1
+set PATH    $HOME/.local/bin $HOME/.cabal/bin /usr/local/opt/coreutils/libexec/gnubin $PATH
+set MANPATH /usr/local/opt/coreutils/libexec/gnuman $MANPATH
+set -x      OS (uname -s)
+set -x      EDITOR nvim
+set -x      NVIM_TUI_ENABLE_CURSOR_SHAPE 1
 
 if test $OS = "Darwin"
   set -x NVIM_TUI_ENABLE_TRUE_COLOR 1
 end
 
+# Colors {{{
+set fish_color_autosuggestion  '-o' 'black'
+set fish_color_command         green
+set fish_color_comment         '-o' 'black'
+set fish_color_cwd             '-o' 'black'
+set fish_color_cwd_root        red
+set fish_color_end             normal
+set fish_color_error           red
+set fish_color_escape          cyan
+set fish_color_history_current cyan
+set fish_color_host            '-o' 'cyan'
+set fish_color_match           cyan
+set fish_color_normal          normal
+set fish_color_operator        normal
+set fish_color_param           normal
+set fish_color_quote           yellow
+set fish_color_redirection     blue
+set fish_color_search_match    --background=magenta
+set fish_color_status          red
+set fish_color_user            green
+set fish_color_valid_path      --underline
+# }}}
+
 
 # ALIASES & FUNCTIONS {{{1
-alias V "vim +V"
-alias vim "nvim"
-alias ghc "ghc -Wall -Werror"
-alias less "less -FSRX"
-alias tmux "tmux -2"
-alias cask "brew cask"
-alias npmls "npm ls --depth=0"
-alias pls "sudo $history[1]"
+alias V      "vim +V"
+alias vim    "nvim"
+alias ghc    "ghc -Wall -Werror"
+alias less   "less -FSRX"
+alias tmux   "tmux -2"
+alias cask   "brew cask"
+alias npmls  "npm ls --depth=0"
+alias pls    "sudo $history[1]"
 alias reload "source $HOME/.config/fish/config.fish"
+
+# Quick directories
+alias code     "cd $HOME/Dropbox/code"
+alias dotfiles "cd $HOME/Dropbox/dotfiles"
+alias notes    "cd $HOME/Dropbox/notes; and ls"
 
 function rc -d "Open the specified program's configuration file" # {{{
   switch $argv[1]
@@ -149,6 +156,5 @@ end
 
 # Disable greeting
 set fish_greeting
-
 
 
