@@ -39,15 +39,18 @@ if g:plugged_installed==1
   call plug#begin('~/.' . g:vimFolder . '/plugged')
   " Considering
   " Plug 'benekastah/neomake'
-  " Plug 'vimwiki/vimwiki'
 
-  " Editing
+  " Editing {{{
   Plug 'terryma/vim-multiple-cursors'
+  Plug 'terryma/vim-expand-region'
   Plug 'junegunn/vim-easy-align'
   Plug 'godlygeek/tabular', {'on': 'Tabularize'}
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-surround'
   Plug 'tommcdo/vim-exchange'
+  " }}}
+
+  " Completion {{{
   Plug 'Valloric/YouCompleteMe', {
     \ 'do': './install.sh --clang-completer',
     \ 'on': []
@@ -55,28 +58,35 @@ if g:plugged_installed==1
   " Plug 'jiangmiao/auto-pairs'
   Plug 'rstacruz/vim-closer'
   Plug 'tpope/vim-endwise'
+  Plug 'reedes/vim-litecorrect'
+  " }}}
 
-  " Search
+  " Search {{{
   Plug 'ctrlpvim/ctrlp.vim'
   Plug 'vasconcelloslf/vim-interestingwords'
   Plug 'thinca/vim-visualstar'
+  " }}}
 
-  " Movement and navigation
+  " Movement and navigation {{{
   Plug 'bruno-/vim-husk'
   Plug 'arecarn/fold-cycle.vim'
+  " }}}
 
-  " Color schemes
+  " Color schemes {{{
   Plug 'zefei/vim-colortuner'
   Plug 'morhetz/gruvbox'
   Plug 'tomasr/molokai'
   Plug 'junegunn/seoul256.vim'
   Plug 'endel/vim-github-colorscheme'
+  Plug 'reedes/vim-colors-pencil'
   Plug 'NLKNguyen/papercolor-theme'
   Plug 'w0ng/vim-hybrid'
   Plug 'chriskempson/base16-vim'
+  Plug 'ajh17/Spacegray.vim'
   Plug 'altercation/vim-colors-solarized'
+  " }}}
 
-  " Language and syntax
+  " Language and syntax {{{
   Plug 'sheerun/vim-polyglot'
   Plug 'dag/vim2hs'
   Plug 'Twinside/vim-haskellFold'
@@ -86,26 +96,29 @@ if g:plugged_installed==1
   Plug 'dag/vim-fish'
   Plug 'ntpeters/vim-better-whitespace'
   Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
+  " }}}
 
-  " Mappings and commands
+  " Mappings and commands {{{
   Plug 'arecarn/crunch.vim' | Plug 'arecarn/selection.vim'
   Plug 'tpope/vim-eunuch'
   Plug 'michaeljsmith/vim-indent-object'
+  Plug 'tpope/vim-repeat'
+  " }}}
 
-  " Miscellaneous
+  " Miscellaneous {{{
   Plug 'bling/vim-airline'
   Plug 'tpope/vim-sensible'
   Plug 'wincent/terminus'
-  Plug 'tpope/vim-repeat'
   Plug 'airblade/vim-gitgutter'
   " Plug 'kshenoy/vim-signature'
+  " }}}
 
   call plug#end() " }}}
 
   " Plugin settings {{{
   if isdirectory(expand('~/.' . g:vimFolder . '/plugged'))
-    " Tagbar extra language config {{{
-    let g:tagbar_type_haskell = {
+    " Tagbar {{{
+    let g:tagbar_type_haskell={
       \ 'ctagsbin'  : 'hasktags',
       \ 'ctagsargs' : '-x -c -o-',
       \ 'kinds'     : [
@@ -137,7 +150,7 @@ if g:plugged_installed==1
       \ }
     \ }
 
-    let g:tagbar_type_markdown = {
+    let g:tagbar_type_markdown={
       \ 'ctagstype' : 'markdown',
       \ 'kinds' : [
         \ 'h:Heading_L1',
@@ -160,8 +173,28 @@ if g:plugged_installed==1
       let g:haskell_json=0
       let g:haskell_xml=0
 
-      let g:haskell_hsp = 0
+      let g:haskell_hsp=0
     " }}}
+    " ctrlp {{{
+      let g:ctrlp_map=''
+
+      " http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
+      if executable('ag')
+        set grepprg=ag\ --nogroup\ --nocolor
+        let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+      else
+        let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+        let g:ctrlp_prompt_mappings = {
+          \ 'AcceptSelection("e")': ['<space>', '<cr>', '<2-LeftMouse>'],
+          \ }
+      endif
+    " }}}
+    " airline {{{
+      let g:airline_theme='zenburn'
+      let g:airline_powerline_fonts=1
+      let g:airline_extensions=['whitespace', 'hunks', 'ctrlp']
+    " }}}
+    " etc... {{{
     let g:plug_threads=40
     let g:better_whitespace_filetypes_blacklist=[
       \ 'vim-plug',
@@ -169,22 +202,21 @@ if g:plugged_installed==1
       \ 'gundo',
       \ 'nerdtree'
       \ ]
-    let g:airline_theme='zenburn'
-    let g:airline_powerline_fonts=1
-    let g:airline_extensions=['whitespace', 'hunks', 'ctrlp']
-    let g:ctrlp_map=''
     let g:colortuner_filepath='~/.vim/colortuner'
     let g:interestingWordsGUIColors=[
       \ '#99B3FF', '#B399FF', '#E699FF', '#FF99B3',
       \ '#99FFE6', '#FFD65C', '#99FFB3', '#E6FF99',
       \ '#FFB399', '#5CD6FF', '#99FF99', '#FFF6CC'
       \ ]
-  endif
+  endif " }}}
+" }}}
+
+" Plugin installer messages {{{
 else
   if !&secure
     echo "\nRun ':Install' to install plugins\n"
 
-    if g:vimFolder == 'nvim' && isdirectory(expand('~/.vim/plugged'))
+    if g:vimFolder=='nvim' && isdirectory(expand('~/.vim/plugged'))
       echo "It looks like you already have some plugins installed for regular"
       echo "Vim. If you don't want redundant plugins, you should symlink `~/.vim`"
       echo "to `~/.nvim`.\n"
@@ -374,7 +406,6 @@ set foldtext=CustomFoldText() " }}}
 
 " Unmap {{{
 noremap Q <Nop>
-noremap K <Nop>
 noremap X <Nop>
 noremap M <Nop>
 noremap s <Nop>
@@ -402,6 +433,7 @@ nnoremap S mzi<CR><Esc>^gk:silent! s/\v +$//<CR>:noh<CR>`z:delm z<CR>
 nnoremap s :%s/\v
 vnoremap s :s/\v
 noremap <BS> :noh<CR>
+nnoremap <CR> G
 noremap <F1> <Esc>
 vnoremap < <gv
 vnoremap > >gv
@@ -427,10 +459,17 @@ if g:plugged_installed==1
   map <Tab> <Plug>(fold-cycle-open)
   map <S-Tab> <Plug>(fold-cycle-close)
 
-  vmap <Enter> <Plug>(EasyAlign)
-  noremap <S-Enter> :Tabularize /
+  vmap v <Plug>(expand_region_expand)
+  vmap V <Plug>(expand_region_shrink)
+  vnoremap <C-v> V
+
+  vmap <CR> <Plug>(EasyAlign)
+  noremap <S-CR> :Tabularize /
 
   noremap <Leader>p :CtrlPMixed<CR>
+else
+  noremap <Tab> zo
+  noremap <S-Tab> zc
 endif
 " }}}
 
@@ -463,7 +502,7 @@ augroup END " }}}
 
 augroup FileTypeAware " {{{
   autocmd!
-  autocmd FileType vim setlocal keywordprg=':help'
+  autocmd FileType vim setlocal keywordprg=:help
   autocmd BufRead,BufNewFile *.md call Markdown()
   autocmd FileType cpp call CPP()
   autocmd FileType gitcommit setlocal spell textwidth=72
