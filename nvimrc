@@ -82,6 +82,7 @@ Plug 'tpope/vim-repeat'
 
 " Miscellaneous                                                             {{{2
 Plug 'bling/vim-airline'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-sensible'
 Plug 'wincent/terminus'
 Plug 'airblade/vim-gitgutter'
@@ -151,23 +152,17 @@ let g:tagbar_type_markdown={
   let g:haskell_hsp=0
 
 " ctrlp                                                                     {{{3
-  let g:ctrlp_map=''
-
-  " http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
   if executable('ag')
     set grepprg=ag\ --nogroup\ --nocolor
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  else
-    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
-    let g:ctrlp_prompt_mappings = {
-      \ 'AcceptSelection("e")': ['<space>', '<cr>', '<2-LeftMouse>'],
-      \ }
+    let g:ctrlp_user_command='ag %s -l --nocolor -g ""'
   endif
 
 " airline                                                                   {{{3
   let g:airline_theme='zenburn'
   let g:airline_powerline_fonts=1
-  let g:airline_extensions=['whitespace', 'hunks', 'ctrlp']
+  let g:airline_section_y=''
+  let g:airline_extensions=['quickfix', 'whitespace', 'ctrlp', 'branch']
+  " let g:airline#extensions#tagbar#flags='s'
 
 " etc...                                                                    {{{3
 let g:plug_threads=40
@@ -371,7 +366,7 @@ set hidden
 set autoread
 
 " Automatically cd to the current file's directory
-set autochdir
+" set autochdir
 
 " Switch to the first open window or tab that contains the specified buffer
 set switchbuf=usetab
@@ -412,7 +407,10 @@ if has('gui_running')
   set guicursor=n-c:block-Cursor-blinkon0,i:ver20
 
   " Font
-  set guifont=PragmataPro:h16,Inconsolata-g:h14
+  set guifont=PragmataPro:h16
+
+  " Line height
+  set linespace=1
 
   if has('gui_macvim') || has('gui_vimr')
     " Use Option/Alt as the Meta key
@@ -482,55 +480,104 @@ function! CPP()                                                           " {{{2
     let &colorcolumn=join(range(76,80),',')
   endif
 endfunction
+
+function! Print()                                                         " {{{2
+  " Set up theme
+  setlocal background=light
+  colorscheme PaperColor
+
+  " Convert to HTML
+  execute "TOhtml"
+
+  " Add some JavaScript so the browser prompts to print
+  execute "normal! /<body\<CR>f;a window.print();\<Esc>gg"
+
+  " Change to a better font
+  execute "normal! /monospace\<CR>iPragmataPro, \<Esc>nniPragmataPro, \<Esc>gg"
+
+  " Disable font ligatures
+  execute "normal! /* {\<CR>f}i -webkit-font-variant-ligatures: no-common-ligatures; \<Esc>gg"
+
+  " " Save the file
+  execute "write"
+
+  " " Open in browser
+  execute "!open \"%\" -a \"Safari\""
+
+  " " Wait for the browser to load it
+  sleep 2
+
+  " " Remove the HTML file
+  execute "!rm \"%\""
+
+  " " Close the buffer
+  execute "quit!"
+
+  " Close the window
+  execute "qa"
+endfunction
 " }}}
 
 
 " MAPPINGS                                                                  {{{1
 
+" Unmap {{{2
+noremap Q       <Nop>
+noremap X       <Nop>
+noremap M       <Nop>
+noremap s       <Nop>
+noremap #       <Nop>
+noremap &       <Nop>
+noremap ,       <Nop>
+noremap <C-p>   <Nop>
+noremap <Left>  <Nop>
+noremap <Down>  <Nop>
+noremap <Up>    <Nop>
+noremap <Right> <Nop>
+
 " General {{{2
-noremap ; :
-noremap : ;
-noremap j gj
-noremap k gk
-noremap n nzz
-noremap N Nzz
-noremap H ^
-noremap L g_
-noremap Y y$
-nnoremap J mzJ`z:delm z<CR>
-nnoremap S mzi<CR><Esc>^gk:silent! s/\v +$//<CR>:noh<CR>`z:delm z<CR>
-nnoremap s :%s/\v
-vnoremap s :s/\v
-noremap <BS> :noh<CR>
-nnoremap <CR> G
-noremap <F1> <Esc>
-vnoremap < <gv
-vnoremap > >gv
+noremap  ;     :
+noremap  :     ;
+noremap  j     gj
+noremap  k     gk
+noremap  n     nzz
+noremap  N     Nzz
+noremap  H     ^
+noremap  L     g_
+noremap  Y     y$
+nnoremap J     mzJ`z:delm z<CR>
+nnoremap S     mzi<CR><Esc>^gk:silent! s/\v +$//<CR>:noh<CR>`z:delm z<CR>
+nnoremap s     :%s/
+vnoremap s     :s/
+noremap  <BS>  :noh<CR>
+nnoremap <CR>  G
+noremap  <F1>  <Esc>
+vnoremap <     <gv
+vnoremap >     >gv
 vnoremap <C-a> <C-a>gv
 vnoremap <C-x> <C-x>gv
 
 " Leader {{{2
 let g:mapleader='\'
-map <Space> <Leader>
+map     <Space>   <Leader>
 noremap <Leader>t :TagbarToggle<CR>
 
 " Homemade vim-unimpaired
 nnoremap [<Space> mzO<Esc>`z:delm z<CR>
 nnoremap ]<Space> mzo<Esc>`z:delm z<CR>
-nnoremap [e "zddk"zP
-nnoremap ]e "zdd"zp
-noremap [b :bprevious<CR>
-noremap ]b :bnext<CR>
+nnoremap [e       "zddk"zP
+nnoremap ]e       "zdd"zp
+noremap  [b       :bprevious<CR>
+noremap  ]b       :bnext<CR>
 
 " Plugin-specific {{{2
-map <Tab> <Plug>(fold-cycle-open)
-map <S-Tab> <Plug>(fold-cycle-close)
-vmap v <Plug>(expand_region_expand)
-vmap V <Plug>(expand_region_shrink)
-vnoremap <C-v> V
-vmap <CR> <Plug>(EasyAlign)
-noremap <S-CR> :Tabularize /
-noremap <Leader>p :CtrlPMixed<CR>
+map      <Tab>     <Plug>(fold-cycle-open)
+map      <S-Tab>   <Plug>(fold-cycle-close)
+vmap     v         <Plug>(expand_region_expand)
+vmap     V         <Plug>(expand_region_shrink)
+vnoremap <C-v>     V
+vmap     <CR>      <Plug>(EasyAlign)
+noremap  <S-CR>    :Tabularize /
 " }}}
 
 
@@ -542,12 +589,18 @@ command! InstallPlugins call InstallPlugins()
 " Edit this file
 command! V edit $MYVIMRC
 
+" Change to current directory of file
+command! Cd setlocal autochdir | setlocal noautochdir
+
 " Load YouCompleteMe
 command! LoadYCM call plug#load('YouCompleteMe') | call youcompleteme#Enable()
                                                 \| echo "YouCompleteMe loaded!"
 
 " Open file in Marked 2
-command! Marked !open % -a "Marked 2"
+command! Marked !open "%" -a "Marked 2"
+
+" Print
+command! Print call Print()
 
 
 " AUTOCOMMANDS                                                              {{{1
@@ -563,7 +616,7 @@ augroup FileTypeAware                                                     " {{{2
   autocmd FileType vim setlocal keywordprg=:help
   autocmd BufRead,BufNewFile *.md call Markdown()
   autocmd FileType cpp call CPP()
-  autocmd FileType gitcommit setlocal spell textwidth=72
+  autocmd FileType gitcommit setlocal spell linebreak textwidth=72
   autocmd FileType vim-plug setlocal nonumber
 augroup END
 " }}}
