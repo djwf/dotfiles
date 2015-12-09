@@ -13,14 +13,14 @@ end
 
 
 # VARIABLES {{{1
-set PATH    $HOME/.local/bin $HOME/.cabal/bin /usr/local/opt/coreutils/libexec/gnubin $PATH
-set MANPATH /usr/local/opt/coreutils/libexec/gnuman $MANPATH
 set -x      OS (uname -s)
 set -x      EDITOR nvim
 set -x      NVIM_TUI_ENABLE_CURSOR_SHAPE 1
 
 if test $OS = "Darwin"
-  set -x NVIM_TUI_ENABLE_TRUE_COLOR 1
+  set PATH    $HOME/.local/bin $HOME/anaconda3/bin $HOME/.cabal/bin /usr/local/opt/coreutils/libexec/gnubin $PATH
+  set MANPATH /usr/local/opt/coreutils/libexec/gnuman $MANPATH
+  # set -x NVIM_TUI_ENABLE_TRUE_COLOR 1
 end
 
 # Colors {{{
@@ -62,6 +62,17 @@ alias reload "source $HOME/.config/fish/config.fish"
 alias code     "cd $HOME/Dropbox/code"
 alias dotfiles "cd $HOME/Dropbox/dotfiles"
 alias notes    "cd $HOME/Dropbox/notes; and ls"
+
+# Android
+alias adb      "$HOME/android/adb"
+alias fastboot "$HOME/android/fastboot"
+
+function iso2img -d "Convert an ISO to an IMG" # {{{
+  for iso in $argv
+    command hdiutil convert -format UDRW -o "$iso.img" "$iso"
+    command mv "$iso.img.dmg" "$iso.img"
+  end
+end # }}}
 
 function rc -d "Open the specified program's configuration file" # {{{
   switch $argv[1]
@@ -142,6 +153,15 @@ function update -d "Run update commands" # {{{
   echo --- Updates complete!
 end # }}}
 
+function saddle -d "Compile Saddleback homework" # {{{
+  set -l cppFiles
+
+  for file in (ls *.cpp)
+    set cppFiles $file $cppFiles
+  end
+
+  g++ $cppFiles -o run
+end
 
 # PROMPT {{{1
 function fish_prompt
@@ -151,10 +171,10 @@ function fish_prompt
   __fish_git_prompt
   set_color normal
   echo -n ' λ '
-  z --add "$PWD"
+  if test -e $HOME/.config/fish/z.fish
+    z --add "$PWD"
+  end
 end
 
 # Disable greeting
 set fish_greeting
-
-
