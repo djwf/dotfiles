@@ -1,9 +1,1 @@
 .DS_Store
-
-# Atom
-atom/*
-!/atom/config.cson
-!/atom/keymap.cson
-!/atom/snippets.cson
-!/atom/styles.less
-!/atom/init.coffee
