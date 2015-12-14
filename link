@@ -1,2 +1,75 @@
-#!/bin/sh
-./dotty/dotty.py dotty.json
+#!/bin/bash
+
+dotfiles=`dirname $0`
+
+read -p "Link dotfiles? (existing files will NOT be overwritten) [y/N] " -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+
+  # Neovim
+  if [ ! -f $HOME/.config/nvim/init.vim ]; then
+    echo "Linking 'config/nvim/init.vim' -> '~/.config/nvim/init.vim'"
+    mkdir -p $HOME/.config/nvim
+    ln -s $dotfiles/config/nvim/init.vim $HOME/.config/nvim/init.vim
+  else
+    echo "Skipping Neovim"
+  fi
+
+  # Vim
+  if [ ! -f $HOME/.vimrc ]; then
+    echo "Linking 'config/nvim/init.vim' -> '~/.vimrc'"
+    ln -s $dotfiles/config/nvim/init.vim $HOME/.vimrc
+  else
+    echo "Skipping Vim"
+  fi
+
+  # Spacemacs
+  if [ ! -f $HOME/.spacemacs ]; then
+    echo "Linking 'spacemacs' -> '~/.spacemacs'"
+    ln -s $dotfiles/spacemacs $HOME/.spacemacs
+
+    if [ ! -d $HOME/.emacs.d/ ]; then
+      read -p "Install Spacemacs? [y/N] " -r
+      echo
+      if [[ $REPLY =~ ^[Yy]$ ]]
+      then
+        git clone --recursive https://github.com/syl20bnr/spacemacs ~/.emacs.d
+      fi
+    fi
+  else
+    echo "Skipping Spacemacs"
+  fi
+
+  # Fish
+  if [ ! -f $HOME/.config/fish/config.fish ]; then
+    echo "Linking 'config/fish/config.fish' -> '~/.config/fish/config.fish'"
+    mkdir -p $HOME/.config/fish
+    ln -s $dotfiles/config/fish/config.fish $HOME/.config/fish/config.fish
+  else
+    echo "Skipping Fish"
+  fi
+
+  # ZSH
+  if [ ! -f $HOME/.zshrc ]; then
+    echo "Linking 'spacemacs' -> '~/.spacemacs'"
+    ln -s $dotfiles/zshrc $HOME/.zshrc
+  else
+    echo "Skipping ZSH"
+  fi
+
+  # Hammerspoon
+  if [ ! -f $HOME/.hammerspoon/init.lua ]; then
+    echo "Linking 'hammerspoon/init.lua' -> '~/.hammerspoon/init.lua'"
+    mkdir -p $HOME/.hammerspoon
+    ln -s $dotfiles/hammerspoon/init.lua $HOME/.hammerspoon/init.lua
+  else
+    echo "Skipping Hammerspoon"
+  fi
+
+  # hushlogin
+  if [ ! -f $HOME/.hushlogin ]; then
+    echo "Creating '~/.hushlogin'"
+    touch $HOME/.hushlogin
+  fi
+fi
+
