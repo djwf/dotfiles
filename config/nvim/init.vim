@@ -13,82 +13,174 @@
 
 " PLUGINS                                                                   {{{1
 
-" Check for Neovim
+" Check for Neovim (:h vim-differences)
 if has('nvim')
-  let g:vim_flavor='nvim'
+  let g:vim_dir='~/.config/nvim'
 else
-  let g:vim_flavor='vim'
+  let g:vim_dir='~/.vim'
 endif
 
-call plug#begin('~/.' . g:vim_flavor . '/plugged')
+if filereadable(expand(g:vim_dir . '/autoload/plug.vim'))
+
+call plug#begin(g:vim_dir . '/plugged')
 
 " Editing                                                                   {{{2
+
+" Multiple cursors like Sublime Text
 Plug 'terryma/vim-multiple-cursors'
-Plug 'terryma/vim-expand-region'
+
+" Quick and basic code alignment
 Plug 'junegunn/vim-easy-align'
+
+" Advanced code alignment with regex
 Plug 'godlygeek/tabular', {'on': 'Tabularize'}
+
+" Comment out lines
 Plug 'tpope/vim-commentary'
+
+" Add and change surrounding quotes or tags
 Plug 'tpope/vim-surround'
+
+" Swap the position of two pieces of text
 Plug 'tommcdo/vim-exchange'
 
 " Completion                                                                {{{2
-Plug 'Valloric/YouCompleteMe', {
-  \ 'do': './install.py --clang-completer',
-  \ 'on': []
-  \ } " :LoadYCM
+
+" Powerful autocomplete
+" Plug 'Valloric/YouCompleteMe', {
+"   \ 'do': './install.py --clang-completer',
+"   \ 'on': []
+"   \ } " :LoadYCM
+
+" Haskell autocomplete
+if has('nvim') && has('python3')
+  Plug 'Shougo/deoplete.nvim'
+endif
+
+" Lightweight non-aggressive auto-pairing
 Plug 'rstacruz/vim-closer'
+
+" Magical CSS autocomplete
+Plug 'rstacruz/vim-hyperstyle'
+
+" Closes if statements for you
 Plug 'tpope/vim-endwise'
+
+" Lightweight autocorrect
 Plug 'reedes/vim-litecorrect'
+
+" More aggressive auto-pairing
 " Plug 'jiangmiao/auto-pairs'
 
 " Search                                                                    {{{2
+
+" Fuzzy {path, file, buffer} search
 Plug 'ctrlpvim/ctrlp.vim'
+
+" Highlight visual selections
 Plug 'vasconcelloslf/vim-interestingwords'
+
+" * for visual mode
 Plug 'thinca/vim-visualstar'
 
 " Movement and navigation                                                   {{{2
+" Emacs-style movement mappings in command mode
 Plug 'bruno-/vim-husk'
+
+" Better fold mappings
 Plug 'arecarn/fold-cycle.vim'
 
 " Color schemes                                                             {{{2
-Plug 'zefei/vim-colortuner'
+
+" Customize your colorscheme's brightness, saturation, contrast, etc.
+" Plug 'zefei/vim-colortuner'
+
+" Too many color schemes
 Plug 'morhetz/gruvbox'
-Plug 'tomasr/molokai'
-Plug 'junegunn/seoul256.vim'
-Plug 'endel/vim-github-colorscheme'
-Plug 'reedes/vim-colors-pencil'
-Plug 'NLKNguyen/papercolor-theme'
-Plug 'w0ng/vim-hybrid'
-Plug 'chriskempson/base16-vim'
-Plug 'joshdick/onedark.vim' | Plug 'joshdick/airline-onedark.vim'
-Plug 'ajh17/Spacegray.vim'
-Plug 'zenorocha/dracula-theme', {'dir': 'vim/'}
-Plug 'altercation/vim-colors-solarized'
+" Plug 'tomasr/molokai'
+" Plug 'junegunn/seoul256.vim'
+" Plug 'endel/vim-github-colorscheme'
+" Plug 'reedes/vim-colors-pencil'
+" Plug 'NLKNguyen/papercolor-theme'
+" Plug 'w0ng/vim-hybrid'
+" Plug 'chriskempson/base16-vim'
+" Plug 'joshdick/onedark.vim' | Plug 'joshdick/airline-onedark.vim'
+" Plug 'ajh17/Spacegray.vim'
+" Plug 'altercation/vim-colors-solarized'
 
 " Language and syntax                                                       {{{2
+
+" Syntax mega-pack
 Plug 'sheerun/vim-polyglot'
-Plug 'dag/vim2hs', {'for': 'haskell'}
+
+" Better Haskell syntax
+if has('nvim')
+  Plug 'neovimhaskell/haskell-vim'
+else
+  Plug 'dag/vim2hs', {'for': 'haskell'}
+endif
+
+" Folded functions show type signatures as labels
 Plug 'Twinside/vim-haskellFold'
+
+" JavaScript stuff
 Plug 'marijnh/tern_for_vim', {'do': 'npm install'}
-Plug 'rstacruz/vim-hyperstyle'
+
+" Liquid files for Jekyll
 Plug 'tpope/vim-liquid'
+
+" Fish shell config file syntax
 Plug 'dag/vim-fish'
+
+" Screams at you when you have trailing whitespace
 Plug 'ntpeters/vim-better-whitespace'
+
+" Show tags in a sidebar
 Plug 'majutsushi/tagbar', {'on': 'TagbarToggle'}
 
 " Mappings and commands                                                     {{{2
+" Calculator
 Plug 'arecarn/crunch.vim' | Plug 'arecarn/selection.vim'
+
+" So you don't need to leave vim to mkdir, mv, rm, etc.
 Plug 'tpope/vim-eunuch'
+
+" Select code based on indent level
 Plug 'michaeljsmith/vim-indent-object'
+
+" Better dot repeat with plugin support
 Plug 'tpope/vim-repeat'
 
 " Miscellaneous                                                             {{{2
+
+" Syntax and error checking
+if has('nvim') || v:version > 704
+  Plug 'benekastah/neomake'
+endif
+
+" The bar at the bottom
 Plug 'bling/vim-airline'
-Plug 'tpope/vim-fugitive'
+
+" So you don't need to leave vim to use git
+" Plug 'tpope/vim-fugitive'
+
+" Sensible defaults
 Plug 'tpope/vim-sensible'
+
+" Better terminal compatibility
 Plug 'wincent/terminus'
+
+" Clipboard support for Neovim
+if has('neovim')
+  Plug 'cazador481/fakeclip.neovim'
+endif
+
+" Git uncommitted changes in the gutter
 Plug 'airblade/vim-gitgutter'
+
+" Displays marks in the gutter
 " Plug 'kshenoy/vim-signature'
+
 " }}}
 
 call plug#end()
@@ -164,10 +256,11 @@ let g:tagbar_type_markdown={
   " let g:airline_theme='onedark'
   let g:airline_powerline_fonts=1
   let g:airline_section_y=''
-  let g:airline_extensions=['quickfix', 'whitespace', 'ctrlp', 'branch']
+  let g:airline_extensions=['quickfix', 'whitespace', 'ctrlp']
   " let g:airline#extensions#tagbar#flags='s'
 
-" misc                                                                      {{{3
+" other                                                                     {{{3
+let g:deoplete#enable_at_startup=1
 let g:onedark_terminal_italics=1
 let g:plug_threads=40
 let g:better_whitespace_filetypes_blacklist=[
@@ -182,10 +275,15 @@ let g:interestingWordsGUIColors=[
   \ '#99FFE6', '#FFD65C', '#99FFB3', '#E6FF99',
   \ '#FFB399', '#5CD6FF', '#99FF99', '#FFF6CC'
   \ ]
+let g:gitgutter_enabled=0
 
 " }}}
 
 " }}}
+
+else
+  echo 'Run :InstallPlugins to install vim-plug'
+endif
 
 
 " SETTINGS                                                                  {{{1
@@ -196,17 +294,20 @@ let g:interestingWordsGUIColors=[
 filetype plugin indent on
 
 " Make backspace work normally
-set backspace=indent,eol,start
+if !has('nvim')
+  set backspace=indent,eol,start
+endif
 
 " Let virtual block mode extend beyond EOL
 set virtualedit=block
 
 " Enable mouse support
-set mouse+=a
+if !has('nvim')
+  set mouse+=a
+endif
 
 " Stop making bizarre archives
 let g:loaded_gzip=1
-
 
 " Appearance                                                                {{{2
 
@@ -227,7 +328,6 @@ catch
   colorscheme darkblue
 endtry
 
-
 " Gutter and statusline                                                     {{{2
 
 " Enable line numbers
@@ -237,7 +337,9 @@ set number
 set numberwidth=3
 
 " Show statusbar
-set laststatus=2
+if !has('nvim')
+  set laststatus=2
+endif
 
 " Show command in statusbar
 set showcmd
@@ -248,14 +350,17 @@ set noshowmode
 " Show line and column in statusbar
 set ruler
 
-
 " Command mode                                                              {{{2
 
 " Remeber all my commands
-set history=9999
+if !has('nvim')
+  set history=10000
+endif
 
 " Use wildmenu suggestions
-set wildmenu
+if !has('nvim')
+  set wildmenu
+endif
 set wildmode=longest,list
 
 " Ignore these files in the wildmenu
@@ -264,11 +369,13 @@ set wildignore+=*.zip,*.map,*.pdf
 set wildignore+=*.jpg,*.jpeg,*.png,*.gif,*.psd,*.tiff
 set wildignore+=.git,.hs,.svn
 
-
 " Indentation and tabs                                                      {{{2
 
 " Use spaces instead of tabs
 set expandtab
+if !has('nvim')
+  set smarttab
+endif
 
 " Two spaces
 set tabstop=2
@@ -276,17 +383,22 @@ set softtabstop=2
 set shiftwidth=2
 
 " Intelligent indentation
-set autoindent
+if !has('nvim')
+  set autoindent
+endif
 set smartindent
-
 
 " Search                                                                    {{{2
 
 " Highlight search result
-set hlsearch
+if !has('nvim')
+  set hlsearch
+endif
 
 " Highlight search as it's typed
-set incsearch
+if !has('nvim')
+  set incsearch
+endif
 
 " Global by defaultl
 set gdefault
@@ -296,7 +408,6 @@ set ignorecase
 
 " ...unless you use capital letters
 set smartcase
-
 
 " Swap/backup/undo files                                                    {{{2
 
@@ -309,7 +420,6 @@ set nobackup
 " Disable undo files
 set noundofile
 
-
 " Splits                                                                    {{{2
 
 " Splits open to the right
@@ -317,7 +427,6 @@ set splitright
 
 " Splits open below
 set splitbelow
-
 
 " Scrolling and wrapping                                                    {{{2
 
@@ -336,7 +445,6 @@ set nowrap
 " Prefer 80 columns
 set textwidth=80
 
-
 " Folding                                                                   {{{2
 
 " Disable folding
@@ -347,7 +455,6 @@ set foldmethod=indent
 
 " Maximum foldception
 set foldnestmax=4
-
 
 " Bells                                                                     {{{2
 
@@ -360,14 +467,15 @@ set visualbell
 " Disable visual bell
 set t_vb =
 
-
 " Buffers and tabs                                                          {{{2
 
 " Allow buffers to be hidden without being closed
 set hidden
 
 " Automatically reload files edited outside of Vim
-set autoread
+if !has('nvim')
+  set autoread
+endif
 
 " Automatically cd to the current file's directory
 " set autochdir
@@ -381,18 +489,18 @@ set title
 " Disable 'Thanks for flying Vim'
 let &titleold=getcwd()
 
-
 " Performance                                                               {{{2
 
 " Indicate a fast terminal connection
-set ttyfast
+if !has('nvim')
+  set ttyfast
+endif
 
 " Don't redraw the screen when executing long macros and stuff
 set lazyredraw
 
 set ttimeout
 set ttimeoutlen=10
-
 
 " }}}
 
@@ -425,15 +533,16 @@ endif
 
 " FUNCTIONS                                                                 {{{1
 
+if !exists(":InstallPlugins")
 function! InstallPlugins()                                                " {{{2
-  if filereadable(expand('~/.' . g:vim_flavor . '/autoload/plug.vim'))
-    echo 'vim-plug is already installed!'
+  if filereadable(expand(g:vim_dir . '/autoload/plug.vim'))
+    execute 'PlugInstall'
   else
     " Install vim-plug
-    execute '!curl -fLo ~/.' . g:vim_flavor . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    execute '!curl -fLo ' . g:vim_dir . '/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
     " Load vim-plug
-    execute 'source ~/.' . g:vim_flavor . '/autoload/plug.vim'
+    execute 'source ' . g:vim_dir . '/autoload/plug.vim'
 
     " Tell vim-plug about plugins in $MYVIMRC
     execute 'source $MYVIMRC'
@@ -441,13 +550,14 @@ function! InstallPlugins()                                                " {{{2
     " Install plugins
     execute 'PlugInstall'
 
-    " Load plugins
-    execute 'source $MYVIMRC'
+    " " Load plugins
+    " execute 'source $MYVIMRC'
 
-    " Close vim-plug split
-    execute 'quit'
+    " " Close vim-plug split
+    " execute 'quit'
   endif
 endfunction
+endif
 
 function! CustomFoldText()                                                " {{{2
   " http://dhruvasagar.com/2013/03/28/vim-better-foldtext
@@ -526,12 +636,13 @@ function! SaddlebackPrint()                                               " {{{2
   " Close the window
   execute "qa"
 endfunction
+
 " }}}
 
 
 " MAPPINGS                                                                  {{{1
 
-" Unmap {{{2
+" Unmap                                                                     {{{2
 noremap Q       <Nop>
 noremap X       <Nop>
 noremap M       <Nop>
@@ -545,7 +656,7 @@ noremap <Down>  <Nop>
 noremap <Up>    <Nop>
 noremap <Right> <Nop>
 
-" General {{{2
+" General                                                                   {{{2
 noremap  ;     :
 noremap  :     ;
 noremap  j     gj
@@ -567,12 +678,13 @@ vnoremap >     >gv
 vnoremap <C-a> <C-a>gv
 vnoremap <C-x> <C-x>gv
 
-" Leader {{{2
+" Leader                                                                    {{{2
 let g:mapleader='\'
 map     <Space>   <Leader>
 noremap <Leader>t :TagbarToggle<CR>
+noremap <Leader>g :GitGutterToggle<CR>
 
-" Homemade vim-unimpaired
+" Homemade vim-unimpaired                                                   {{{2
 nnoremap [<Space> mzO<Esc>`z:delm z<CR>
 nnoremap ]<Space> mzo<Esc>`z:delm z<CR>
 nnoremap [e       "zddk"zP
@@ -580,14 +692,17 @@ nnoremap ]e       "zdd"zp
 noremap  [b       :bprevious<CR>
 noremap  ]b       :bnext<CR>
 
-" Plugin-specific {{{2
+" Plugin-specific                                                           {{{2
 map      <Tab>     <Plug>(fold-cycle-open)
 map      <S-Tab>   <Plug>(fold-cycle-close)
-vmap     v         <Plug>(expand_region_expand)
-vmap     V         <Plug>(expand_region_shrink)
-vnoremap <C-v>     V
 vmap     <CR>      <Plug>(EasyAlign)
+" Only works in a GUI
 noremap  <S-CR>    :Tabularize /
+
+inoremap <silent><expr> <Tab>
+  \ pumvisible() ? "\<C-n>" :
+  \ deoplete#mappings#manual_complete()
+
 " }}}
 
 
@@ -618,7 +733,13 @@ command! SaddlebackPrint call SaddlebackPrint()
 augroup ForceSettings                                                     " {{{2
   " Reasoning: http://stackoverflow.com/a/8748154
   autocmd!
-  autocmd! BufNewFile,BufRead * setlocal formatoptions=rq2j
+  if !has('nvim')
+    " Vim
+    autocmd! BufNewFile,BufRead * setlocal formatoptions=rq2
+  else
+    " Neovim
+    autocmd! BufNewFile,BufRead * setlocal formatoptions=rq2j
+  endif
 augroup END
 
 augroup FileTypeAware                                                     " {{{2
@@ -629,6 +750,11 @@ augroup FileTypeAware                                                     " {{{2
   autocmd FileType cpp call CPP()
   autocmd FileType gitcommit setlocal spell linebreak textwidth=72
   autocmd FileType vim-plug setlocal nonumber
+augroup END
+
+augroup Neomake                                                           " {{{2
+  autocmd!
+  autocmd BufWritePost * if exists(':Neomake') | Neomake | endif
 augroup END
 " }}}
 
@@ -672,5 +798,6 @@ endfunction
 nnoremap <silent> gs :set opfunc=SourceVimscript<CR>g@
 vnoremap <silent> gs :<C-U>call SourceVimscript("visual")<CR>
 nnoremap <silent> gss :call SourceVimscript("currentline")<CR>
+
 " }}}
 

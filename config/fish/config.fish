@@ -1,26 +1,16 @@
 # vim: foldmethod=marker foldenable
 
-# INIT {{{1
-# http://www.iterm2.com/shell_integration.html
-if test -e $HOME/.iterm2_shell_integration.fish
-  source $HOME/.iterm2_shell_integration.fish
-end
-
-# https://github.com/sjl/z-fish
-if test -e $HOME/.config/fish/z.fish
-  . $HOME/.config/fish/z.fish
-end
-
-
 # VARIABLES {{{1
 set -x      OS (uname -s)
 set -x      EDITOR nvim
 set -x      NVIM_TUI_ENABLE_CURSOR_SHAPE 1
 
 if test $OS = "Darwin"
-  set PATH    $HOME/.local/bin $HOME/anaconda3/bin $HOME/.cabal/bin /usr/local/opt/coreutils/libexec/gnubin $PATH
+  set PATH    $HOME/.local/bin $HOME/.cabal/bin /usr/local/opt/coreutils/libexec/gnubin $PATH
   set MANPATH /usr/local/opt/coreutils/libexec/gnuman $MANPATH
-  # set -x NVIM_TUI_ENABLE_TRUE_COLOR 1
+  # if test $TERM_PROGRAM = "iTerm.app"
+  #   set -x NVIM_TUI_ENABLE_TRUE_COLOR 1
+  # end
 end
 
 # Colors {{{
@@ -48,6 +38,7 @@ set fish_color_valid_path      --underline
 
 
 # ALIASES & FUNCTIONS {{{1
+alias ll     "ls -l"
 alias V      "vim +V"
 alias vim    "nvim"
 alias ghc    "ghc -Wall -Werror"
@@ -57,11 +48,6 @@ alias cask   "brew cask"
 alias npmls  "npm ls --depth=0"
 alias pls    "sudo $history[1]"
 alias reload "source $HOME/.config/fish/config.fish"
-
-# Quick directories
-alias code     "cd $HOME/Dropbox/code"
-alias dotfiles "cd $HOME/Dropbox/dotfiles"
-alias notes    "cd $HOME/Dropbox/notes; and ls"
 
 # Android
 alias adb      "$HOME/android/adb"
@@ -80,7 +66,7 @@ function rc -d "Open the specified program's configuration file" # {{{
     case vim vi v
       eval $EDITOR $HOME/.vimrc
     case neovim nvim n
-      eval $EDITOR $HOME/.nvimrc
+      eval $EDITOR $HOME/.config/nvim/init.vim
 
     # Shells
     case zsh z
@@ -153,7 +139,7 @@ function update -d "Run update commands" # {{{
   echo --- Updates complete!
 end # }}}
 
-function saddle -d "Compile Saddleback homework" # {{{
+function cpp-compile -d "Compile all .cpp files in the current directory" # {{{
   set -l cppFiles
 
   for file in (ls *.cpp)
@@ -171,9 +157,6 @@ function fish_prompt
   __fish_git_prompt
   set_color normal
   echo -n ' λ '
-  if test -e $HOME/.config/fish/z.fish
-    z --add "$PWD"
-  end
 end
 
 # Disable greeting
