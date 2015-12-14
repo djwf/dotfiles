@@ -1,0 +1,17 @@
+{
+  "directories": [
+    "~/.config",
+    "~/.hammerspoon"
+  ],
+
+  "link": {
+    "config/": "~/.config",
+    "hammerspoon/": "~/.hammerspoon",
+    "zshrc": "~/.zshrc",
+    "spacemacs": "~/.spacemacs"
+  },
+
+  "commands": [
+    "touch ~/.hushlogin"
+  ]
+}

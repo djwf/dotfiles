@@ -61,21 +61,25 @@ function iso2img -d "Convert an ISO to an IMG" # {{{
 end # }}}
 
 function rc -d "Open the specified program's configuration file" # {{{
-  switch $argv[1]
-    # Editors
-    case vim vi v
-      eval $EDITOR $HOME/.vimrc
-    case neovim nvim n
-      eval $EDITOR $HOME/.config/nvim/init.vim
+  if test (count $argv) -gt 0
+    switch $argv[1]
+      # Editors
+      case vim vi v
+        eval $EDITOR $HOME/.vimrc
+      case neovim nvim n
+        eval $EDITOR $HOME/.config/nvim/init.vim
 
-    # Shells
-    case zsh z
-      eval $EDITOR $HOME/.zshrc
-    case fish f
-      eval $EDITOR $HOME/.config/fish/config.fish
+      # Shells
+      case zsh z
+        eval $EDITOR $HOME/.zshrc
+      case fish f
+        eval $EDITOR $HOME/.config/fish/config.fish
 
-    case '*'
-      echo Not defined: $argv
+      case '*'
+        echo Not defined: $argv
+    end
+  else
+    echo No argument
   end
 end # }}}
 
