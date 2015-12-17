@@ -1,9 +1,9 @@
 # vim: foldmethod=marker foldenable
 
 # VARIABLES {{{1
-set -x      OS (uname -s)
-set -x      EDITOR nvim
-set -x      NVIM_TUI_ENABLE_CURSOR_SHAPE 1
+set -x OS (uname -s)
+set -x EDITOR nvim
+set -x NVIM_TUI_ENABLE_CURSOR_SHAPE 1
 
 if test $OS = "Darwin"
   set PATH    $HOME/.local/bin $HOME/.cabal/bin /usr/local/opt/coreutils/libexec/gnubin $PATH
@@ -55,8 +55,9 @@ alias fastboot "$HOME/android/fastboot"
 
 function iso2img -d "Convert an ISO to an IMG" # {{{
   for iso in $argv
-    command hdiutil convert -format UDRW -o "$iso.img" "$iso"
-    command mv "$iso.img.dmg" "$iso.img"
+    hdiutil convert -format UDRW -o "$iso.img" "$iso"
+    mv "$iso.img.dmg" "$iso.img"
+    mv "$iso.img" (echo "$iso.img" | sed 's/\.iso//')
   end
 end # }}}
 
@@ -85,7 +86,7 @@ end # }}}
 
 function ls -d "List files in the current directory" # {{{
   if test $OS = "Darwin"
-    command ls -AFGh $argv
+    command ls -AFGh --color $argv
   else if test $OS = "Linux"
     command ls -AFph --group-directories-first --color=always $argv
   else
@@ -132,35 +133,66 @@ function trash -d "Move a specified file to the Trash" # {{{
 end # }}}
 
 function update -d "Run update commands" # {{{
-  echo --- Updating Homebrew...
-  brew update
+  echo "--- Updating Homebrew..."
+  brew update; and brew upgrade --all
 
-  echo --- Updating fish completions
+  echo "--- Updating fish completions"
   fish_update_completions
 
-  echo --- Updating Vim plugins...
+  echo "--- Updating Vim plugins..."
   vim +PlugUpgrade +PlugClean! +PlugUpdate +qa
-  echo --- Updates complete!
+  echo "--- Updates complete!"
 end # }}}
 
 function cpp-compile -d "Compile all .cpp files in the current directory" # {{{
   set -l cppFiles
 
+  echo "--- Compiling:"
   for file in (ls *.cpp)
+    echo -n "$file "
     set cppFiles $file $cppFiles
   end
+  echo
 
   g++ $cppFiles -o run
 end
 
+function cpp-run -d "Compile and run all .cpp files in the current directory"
+  cpp-compile $argv
+  echo "--- Running:"
+  clear
+  ./run
+end
+
 # PROMPT {{{1
 function fish_prompt
-  set_color $fish_color_cwd
-  echo -n (prompt_pwd)
-  set_color yellow
-  __fish_git_prompt
-  set_color normal
-  echo -n ' λ '
+  # Prompt char
+  if git rev-parse > /dev/null 2>/dev/null
+    set prompt_char '± '
+  else
+    set prompt_char '$ '
+  end
+
+  set git_branch (git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+
+  # NOT WORKING
+  # if test $status != 0
+  #   set_color red
+  #   echo -n "["
+  #   echo -n $status
+  #   echo -n "] "
+  # end
+  set_color magenta; and echo -n $USER
+  set_color normal; and echo -n " on "
+  set_color blue; and echo -n (hostname)
+  set_color normal; and echo -n " in "
+  set_color green; and echo -n (pwd | sed "s $HOME ~ ")
+  if git branch >/dev/null 2>/dev/null
+    set_color normal; and echo -n " in "
+    # set_color yellow; and echo -n "git:"
+    set_color yellow; and echo -n $git_branch
+  end
+  set_color normal; and echo -n \n$prompt_char
 end
 
 # Disable greeting
