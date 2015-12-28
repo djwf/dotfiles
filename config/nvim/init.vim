@@ -120,6 +120,9 @@ else
   Plug 'dag/vim2hs', {'for': 'haskell'}
 endif
 
+" MoonScript
+Plug 'leafo/moonscript-vim'
+
 " Folded functions show type signatures as labels
 Plug 'Twinside/vim-haskellFold'
 
@@ -563,8 +566,8 @@ function! CustomFoldText()                                                " {{{2
   " http://dhruvasagar.com/2013/03/28/vim-better-foldtext
   " http://www.gregsexton.org/2011/03/improving-the-text-displayed-in-a-fold/
 
-  " The characters used in single-line comments ---------> [       here       ]   and    [       here       ]
-  let line=' ' . substitute(getline(v:foldstart), '^\s*["#(//)(--)(;{1-3})]\?\s*\|\s*["#(//)(--)(;{1-3})]\?\s*{{' . '{\d*\s*', '', 'g') . ' '
+  " The characters used in single-line comments -----> [       here       ]   and    [       here       ]
+  let line=' ' . substitute(getline(v:foldstart), '^\s*["#(//)(\-\-)(;{1-3})]\?\s*\|\s*["#(//)(\-)(;{1-3})]\?\s*{{' . '{\d*\s*', '', 'g') . ' '
   let lines_count=v:foldend - v:foldstart + 1
   let foldpercentage=printf("[%.0f", ((1+v:foldend-v:foldstart)*1.0)/(line("$"))*100) . "%] "
   let foldchar=matchstr(&fillchars, 'fold:\zs.')
@@ -746,6 +749,7 @@ augroup FileTypeAware                                                     " {{{2
   autocmd!
   autocmd FileType vim setlocal keywordprg=:help
   autocmd BufRead,BufNewFile *.md call Markdown()
+  autocmd BufRead,BufNewFile *.plist setlocal filetype=xml
   autocmd FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType cpp call CPP()
   autocmd FileType gitcommit setlocal spell linebreak textwidth=72

@@ -37,7 +37,7 @@ set fish_color_valid_path      --underline
 # }}}
 
 
-# ALIASES & FUNCTIONS {{{1
+# ALIASES {{{1
 alias ll     "ls -l"
 alias V      "vim +V"
 alias vim    "nvim"
@@ -53,6 +53,11 @@ alias reload "source $HOME/.config/fish/config.fish"
 alias adb      "$HOME/android/adb"
 alias fastboot "$HOME/android/fastboot"
 
+# Misc
+alias love "/Applications/love.app/Contents/MacOS/love"
+
+
+# FUNCTIONS {{{1
 function iso2img -d "Convert an ISO to an IMG" # {{{
   for iso in $argv
     hdiutil convert -format UDRW -o "$iso.img" "$iso"
@@ -155,14 +160,14 @@ function cpp-compile -d "Compile all .cpp files in the current directory" # {{{
   echo
 
   g++ $cppFiles -o run
-end
+end # }}}
 
-function cpp-run -d "Compile and run all .cpp files in the current directory"
+function cpp-run -d "Compile and run all .cpp files in the current directory" # {{{
   cpp-compile $argv
   echo "--- Running:"
   clear
   ./run
-end
+end # }}}
 
 # PROMPT {{{1
 function fish_prompt
@@ -183,8 +188,8 @@ function fish_prompt
   #   echo -n "] "
   # end
   set_color magenta; and echo -n $USER
-  set_color normal; and echo -n " on "
-  set_color blue; and echo -n (hostname)
+  # set_color normal; and echo -n " on "
+  # set_color blue; and echo -n (hostname)
   set_color normal; and echo -n " in "
   set_color green; and echo -n (pwd | sed "s $HOME ~ ")
   if git branch >/dev/null 2>/dev/null
