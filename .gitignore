@@ -1,2 +1,9 @@
 .DS_Store
+
 /hammerspoon/*.lua
+
+/config/fish/*
+!/config/fish/config.fish
+
+/config/nvim/*
+!/config/nvim/init.vim
