@@ -64,17 +64,6 @@ end
 # FUNCTIONS {{{1
 # OS X only {{{
 if test $OS = "Darwin"
-  function update -d "Run update commands" # {{{
-    echo "--- Updating Homebrew packages..."
-    brew update; and brew upgrade --all
-
-    echo "--- Updating Fish completions..."
-    fish_update_completions
-
-    echo "--- Updating Vim plugins..."
-    vim +PlugUpgrade +PlugClean! +PlugUpdate +qa
-    echo "--- Updates complete!"
-  end # }}}
   function pman -d "Open man page in Preview.app" # {{{
     man -t $argv[1] | open -fa Preview.app
   end # }}}
@@ -168,6 +157,19 @@ function cpp-compile -d "Compile all .cpp files in the current directory" # {{{
   echo
 
   g++ $cppFiles -o run
+end # }}}
+function update -d "Run update commands" # {{{
+  if test $OS = "Darwin"
+    echo "--- Updating Homebrew packages..."
+    brew update; and brew upgrade --all
+  end
+
+  echo "--- Updating Fish completions..."
+  fish_update_completions
+
+  echo "--- Updating Vim plugins..."
+  vim +PlugUpgrade +PlugClean! +PlugUpdate +qa
+  echo "--- Updates complete!"
 end # }}}
 # }}}
 
