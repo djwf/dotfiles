@@ -5,6 +5,8 @@
 set -x OS (uname -s)
 set -x EDITOR nvim
 set -x NVIM_TUI_ENABLE_CURSOR_SHAPE 1
+set -x SXHKD_SHELL /bin/bash
+set -x NVIM_TUI_ENABLE_TRUE_COLOR 1
 
 if test $OS = "Darwin"
   set PATH    $HOME/.local/bin $HOME/.cabal/bin /usr/local/opt/coreutils/libexec/gnubin $PATH
@@ -41,8 +43,9 @@ set fish_color_valid_path      --underline
 # ALIASES {{{1
 # General {{{
 alias ll     "ls -l"
-alias V      "vim +V"
-alias vim    "nvim"
+alias V      "nvim +V"
+alias emacs  "emacs -nw"
+alias E      "emacs ~/.spacemacs"
 alias ghc    "ghc -Wall -Werror"
 alias less   "less -FSRX"
 alias tmux   "tmux -2"
@@ -57,6 +60,13 @@ alias fastboot "$HOME/android/fastboot"
 if test $OS = "Darwin"
   alias cask "brew cask"
   alias love "/Applications/love.app/Contents/MacOS/love"
+end
+# }}}
+# Linux only {{{
+if test $OS = "Linux"
+  alias ip "ip --color"
+  alias sysls "systemctl list-unit-files"
+  alias reflector-update "sudo reflector --fastest 100 --age 48 --sort 'rate' --save /etc/pacman.d/mirrorlist --threads 10"
 end
 # }}}
 
@@ -113,13 +123,26 @@ if test $OS = "Darwin"
 end
 # }}}
 # Linux only {{{
+if test $OS = "Linux"
+  function explicit -d "List explicitly installed" # {{{
+    # By default excludes `base` and `base-devel` groups
+    bash -c "comm -23 <(pacman -Qeq | sort | uniq) <(pacman -Qgq base base-devel $argv | sort | uniq) | column | less"
+  end # }}}
+  function battery -d "Show status of both batteries" # {{{
+    echo "INTERNAL BATTERY:"
+    upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep -E "state|to\ full|percentage" | sed 's/     //'
+    echo
+    echo "REMOVABLE BATTERY:"
+    upower -i /org/freedesktop/UPower/devices/battery_BAT1 | grep -E "state|to\ full|percentage" | sed 's/     //'
+  end # }}}
+end
 # }}}
 # Universal {{{
 function rc -d "Open the specified program's configuration file" # {{{
   if test (count $argv) -gt 0
     switch $argv[1]
       # Editors
-      case vim vi v
+      case vim v
         eval $EDITOR $HOME/.vimrc
       case neovim nvim n
         eval $EDITOR $HOME/.config/nvim/init.vim
@@ -129,6 +152,22 @@ function rc -d "Open the specified program's configuration file" # {{{
         eval $EDITOR $HOME/.zshrc
       case fish f
         eval $EDITOR $HOME/.config/fish/config.fish
+
+      # Linux
+      case xorg x11 x
+        eval $EDITOR $HOME/.xinitrc
+      case xresources xre re
+        eval $EDITOR $HOME/.config/Xresources
+      case xmodmap xmod mod map
+        eval $EDITOR $HOME/.config/Xmodmap
+      case bspwm bsp b
+        eval $EDITOR $HOME/.config/bspwm/bspwmrc
+      case sxhkd sx s
+        eval $EDITOR $HOME/.config/sxhkd/sxhkdrc
+      case lemonbar bar
+        eval $EDITOR $HOME/.config/bar.sh
+      case compton comp
+        eval $EDITOR $HOME/.config/compton.conf
 
       case '*'
         echo Not defined: $argv
@@ -164,11 +203,16 @@ function update -d "Run update commands" # {{{
     brew update; and brew upgrade --all
   end
 
+  if test $OS = "Linux"
+    sudo pacman -Syu
+    sudo aura -Aau
+  end
+
   echo "--- Updating Fish completions..."
   fish_update_completions
 
   echo "--- Updating Vim plugins..."
-  vim +PlugUpgrade +PlugClean! +PlugUpdate +qa
+  nvim +PlugUpgrade +PlugClean! +PlugUpdate +qa
   echo "--- Updates complete!"
 end # }}}
 # }}}
@@ -197,7 +241,7 @@ function fish_prompt
   # set_color normal; and echo -n " on "
   # set_color blue; and echo -n (hostname)
   # set_color normal; and echo -n " in "
-  set_color white; and echo -n "$time "
+  # set_color white; and echo -n "$time "
   set_color green; and echo -n (pwd | sed "s $HOME ~ ")
   if git branch >/dev/null 2>/dev/null
     set_color normal; and echo -n " in "

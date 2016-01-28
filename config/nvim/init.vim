@@ -102,10 +102,10 @@ Plug 'morhetz/gruvbox'
 " Plug 'endel/vim-github-colorscheme'
 " Plug 'reedes/vim-colors-pencil'
 " Plug 'NLKNguyen/papercolor-theme'
-" Plug 'w0ng/vim-hybrid'
+Plug 'w0ng/vim-hybrid'
 " Plug 'chriskempson/base16-vim'
 " Plug 'joshdick/onedark.vim' | Plug 'joshdick/airline-onedark.vim'
-" Plug 'ajh17/Spacegray.vim'
+Plug 'ajh17/Spacegray.vim'
 " Plug 'altercation/vim-colors-solarized'
 
 " Language and syntax                                                       {{{2
@@ -134,6 +134,9 @@ Plug 'tpope/vim-liquid'
 
 " Fish shell config file syntax
 Plug 'dag/vim-fish'
+
+" sxhkdrc syntax
+Plug 'baskerville/vim-sxhkdrc'
 
 " Screams at you when you have trailing whitespace
 Plug 'ntpeters/vim-better-whitespace'
@@ -580,9 +583,9 @@ set foldtext=CustomFoldText()
 
 function! Markdown()                                                      " {{{2
   setlocal filetype=markdown
-  setlocal wrap
-  setlocal linebreak
-  setlocal spell
+  " setlocal wrap
+  " setlocal linebreak
+  " setlocal spell
   setlocal tabstop=4
   setlocal softtabstop=4
   setlocal shiftwidth=4
