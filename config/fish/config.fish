@@ -14,6 +14,8 @@ if test $OS = "Darwin"
   # if test $TERM_PROGRAM = "iTerm.app"
   #   set -x NVIM_TUI_ENABLE_TRUE_COLOR 1
   # end
+else
+  set PATH $HOME/.stack/programs/x86_64-linux/ghc-7.10.1/bin/ $HOME/.local/bin $HOME/.npm-global/bin $PATH
 end
 # }}}
 # Colors {{{
@@ -44,7 +46,8 @@ set fish_color_valid_path      --underline
 # General {{{
 alias ll     "ls -l"
 alias V      "nvim +V"
-alias emacs  "emacs -nw"
+alias emacs  "emacsclient -tca ''"
+alias e      "$HOME/emacsc"
 alias E      "emacs ~/.spacemacs"
 alias ghc    "ghc -Wall -Werror"
 alias less   "less -FSRX"
@@ -220,6 +223,9 @@ end # }}}
 
 # PROMPT {{{1
 function fish_prompt
+  # Enable Vi mode
+  # fish_vi_mode
+
   # Prompt char
   if git rev-parse > /dev/null 2>/dev/null
     set prompt_char '± '

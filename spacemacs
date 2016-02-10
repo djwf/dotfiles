@@ -1,6 +1,8 @@
 ;; -*- mode: emacs-lisp -*-
+;; vim: ft=lisp
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
+
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -18,39 +20,26 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
-     ;; Languages and syntax highlighting
-     ;; ----------------------------------------------------------------
-     c-c++
+     (c-c++ :variables
+            c-c++-enable-clang-support t
+            c-c++-default-mode-for-headers 'c++-mode)
      haskell
+     shell-scripts
      html
      javascript
+     ;; dockerfile
      markdown
-     shell-scripts
+     org
      vimscript
-     dockerfile
      emacs-lisp
-
-     ;; Editing
-     ;; ----------------------------------------------------------------
-     ;; auto-complete
+     (auto-completion :disabled-for org git)
      syntax-checking
-
-     ;; Modes
-     ;; ----------------------------------------------------------------
+     (spell-checking :variables spell-checking-enable-by-default nil)
      ;; git
-     ;; org
-
-     ;; Interface
-     ;; ----------------------------------------------------------------
-     smex
-
-     ;; Vim
-     ;; ----------------------------------------------------------------
+     ;; version-control
      evil-commentary
-     vim-empty-lines
+     ;; vim-empty-lines
      ;; unimpaired
-
-
 
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
@@ -75,7 +64,7 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '(rainbow-delimiters)
+   dotspacemacs-excluded-packages '(yasnippet)
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -128,16 +117,14 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(gruvbox
+                         spacemacs-dark
                          spacemacs-light
                          solarized-light
                          solarized-dark
                          leuven
                          monokai
-                         zenburn
-
-                         ;; User
-                         gruvbox)
+                         zenburn)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -146,8 +133,7 @@ values."
                                :size 15
                                :weight normal
                                :width normal
-                               :powerline-scale 1.5
-                               )
+                               :powerline-scale 1.5)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -253,7 +239,7 @@ values."
    dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server t
+   dotspacemacs-persistent-server nil
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    ;; (default '("ag" "pt" "ack" "grep"))
@@ -282,25 +268,93 @@ in `dotspacemacs/user-config'."
 This function is called at the very end of Spacemacs initialization after
 layers configuration. You are free to put any user code."
 
-  ;; Fixes freezing at launch
-  (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+  ;; Vim plugin wishlist:
+  ;; * TODO `vim-multiple-cursors'
+  ;; * TODO `vim-interestingwords'
+  ;; * TODO `fold-cycle'
+  ;; * TODO `vim-better-whitespace'
+  ;; * TODO `vim-eunuch'
+  ;; * TODO `vim-gitgutter'
+  ;; * DONE `tabular/vim-easy-align'
 
-  ;; Font
-  (set-face-attribute 'default nil :family "Iosevka")
-  (set-face-attribute 'default nil :height 150)
+  ;; Fix emacsclient not loading custom fonts in new frames
+  (if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (select-frame frame)
+                (set-default-font "Iosevka-15")))
+    (set-default-font "Iosevka-15"))
 
-  ;; Indent with 2 spaces
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 2)
-
-  ;; Evil key remapping
-  (define-key evil-motion-state-map (kbd ":") 'evil-repeat-find-char)
-  (define-key evil-motion-state-map (kbd "j") 'evil-next-visual-line)
-  (define-key evil-motion-state-map (kbd "k") 'evil-previous-visual-line)
-  (define-key evil-motion-state-map (kbd "H") 'evil-first-non-blank)
-  (define-key evil-motion-state-map (kbd "L") 'evil-last-non-blank)
-  (define-key evil-motion-state-map (kbd "<backspace>") 'evil-search-highlight-persist-remove-all)
+  (setq-default
+    ;; Fixes freezing at launch
+    tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
+    ;; Set Google Chrome as web browser
+    browse-url-browser-function 'browse-url-generic browse-url-generic-program "google-chrome-stable"
+    ;; Disable indentation rounding
+    evil-shift-round nil
+    ;; Use spaces instead of tabs
+    indent-tabs-mode nil
+    ;; Tab size of 2
+    tab-width 2
+    ;; Don't prompt for following symbolic links
+    vc-follow-symlinks t
+    ;; Scroll less with the trackpad
+    mouse-wheel-scroll-amount '(2)
+    ;; Disable unicode numbering in Spaceline
+    spaceline-workspace-numbers-unicode nil
+    spaceline-window-numbers-unicode nil
+    ;; `set gdefault'
+    evil-ex-substitute-global t
+    ;; Don't highlight searches under 3 characters long
+    evil-search-highlight-string-min-len 3
+    ;; Highlight trailing whitespace
+    ;; (shows in which-key buffers too)
+    ;; show-trailing-whitespace t
+    ;; Disable blinking cursor
+    visible-cursor nil
+    )
+  ;; Remove buffer size (number of characters) from modeline
+  (spaceline-toggle-buffer-size-off)
+  ;; Swap `;' and `:' keys' functions
+  (define-key evil-normal-state-map (kbd ":") 'evil-repeat-find-char)
+  ;; `gj' and `gk'
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+  ;; Move to beginning and end of line
+  (define-key evil-normal-state-map (kbd "H") 'evil-first-non-blank)
+  (define-key evil-normal-state-map (kbd "L") 'evil-last-non-blank)
+  ;; Center cursor vertically when moving between search results
+  (define-key evil-normal-state-map (kbd "n") (lambda () (interactive) (evil-search-next) (evil-scroll-line-to-center nil)))
+  (define-key evil-normal-state-map (kbd "N") (lambda () (interactive) (evil-search-previous) (evil-scroll-line-to-center nil)))
+  ;; Shortcut for substitute Ex command
+  (define-key evil-normal-state-map (kbd "s") (lambda () (interactive) (evil-ex "%s/")))
+  (evil-define-key 'visual evil-surround-mode-map "s" (lambda () (interactive) (evil-ex "'<,'>s/")))
+  ;; `set nohlsearch'
+  (define-key evil-normal-state-map (kbd "<backspace>") 'evil-search-highlight-persist-remove-all)
+  ;; Tabularize!
+  (define-key evil-visual-state-map (kbd "RET") 'align-regexp)
+  ;; Toggle fold
+  (define-key evil-normal-state-map (kbd "TAB") 'evil-toggle-fold)
+  ;; Restore default vim-surround keybinding
+  (evil-define-key 'visual evil-surround-mode-map "S" 'evil-surround-region)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["color-237" "#d75f5f" "#afaf00" "#ffaf00" "#87afaf" "#d787af" "#87af87" "color-223"])
+ '(custom-safe-themes
+   (quote
+    ("badc4f9ae3ee82a5ca711f3fd48c3f49ebe20e6303bba1912d4e2d19dd60ec98" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
